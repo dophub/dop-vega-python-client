@@ -14,7 +14,7 @@ def login():
     global global_token
 
     login_endpoint = f"{API_URL}/sefim/auth/login"
-    username = os.getenv("USERNAME")
+    username = os.getenv("APIUSER")
     password = os.getenv("PASSWORD")
 
     print(f"login endpoint {login_endpoint}")
