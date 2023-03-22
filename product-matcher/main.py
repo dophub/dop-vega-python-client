@@ -1,14 +1,35 @@
 import os
+import json
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
 API_URL = os.getenv("API_URL")
-REMOTE_URL = "https://integrationv2.siparisim.app/product"
-REMOTE_TOKEN = os.getenv("REMOTE_TOKEN")
 
 global_token = ""
+global_remote_token = ""
+
+api_key = os.getenv("REMOTE_API_KEY")
+secret_key = os.getenv("REMOTE_API_SECRET")
+REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
+
+def remote_login():
+    global global_remote_token
+    global api_key
+    global secret_key
+
+    login_endpoint = f"{REMOTE_API_URL}/publicapi/auth/login"
+    print(login_endpoint)
+    print({"apikey": api_key, "secretkey": secret_key})
+
+    response = requests.post(login_endpoint, json={"apikey": api_key, "secretkey": secret_key})
+    print(response.status_code)
+    
+    if response.status_code  in (200,201):
+        global_remote_token = response.json()["access_token"]
+    else:
+        raise Exception("Product API Login işlemi başarısız oldu.")
 
 def login():
     global global_token
@@ -16,6 +37,7 @@ def login():
     login_endpoint = f"{API_URL}/sefim/auth/login"
     username = os.getenv("APIUSER")
     password = os.getenv("PASSWORD")
+
 
     print(f"login endpoint {login_endpoint}")
     print(f"user: {username}")
@@ -45,22 +67,125 @@ def get_product_list():
     else:
         raise Exception("Ürün listesi alınamadı.")
 
+
+def prepare_product(product):
+    """
+        1- Ürünlerin choice1s ve choice2s değerleri birleştirilecek
+        choice1s:
+    {
+        "Id": 14549,
+        "ProductId": 10205,
+        "Name": "BRASIL SANTOS",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+    }
+
+        choice2s:
+        {
+          "Id": 10267,
+          "ProductId": 10205,
+          "Choice1Id": 14549,
+          "Name": "KUPA(330ML)",
+          "Price": 0,
+          "Aktarildi": true,
+          "IsSynced": null,
+          "IsUpdated": null
+      }
+
+
+      Çıktı: 
+
+      {
+       "name": "BRASIL SANTOS KUPA(330ML)",
+       "price": 0 + 0,
+       addition_data: {choice1Id:14549, choise2Id:10267, code:"BRASIL SANTOS.KUPA(250ML)"}
+      }
+
+
+    """
+    option1=[]
+    option2=[]
+    if len(product.get("choice2s",[]))>0:
+        for choice2s in product.get("choice2s"):
+            choice1 = filter(lambda item: item.get("Id") == choice2s.get("Choice1Id"), product.get("choice1s"))
+            choice1=list(choice1)
+            if choice1:
+                choice1 = choice1[0]
+                name = f"{choice1['Name']} {choice2s['Name']}"
+                code = f"{choice1['Name']}.{choice2s['Name']}"
+                price = choice1['Price'] + choice2s['Price']
+                additional_data = {"choice1id": choice1['Id'],"choice2id": choice2s['Id'], "code":code, "price":price}
+                option1.append({"name": name, "price": price, "additional_data":additional_data})
+    else:
+        # Choice2 yok direkt seçenekler choice1
+        for choice1 in product.get("choice1s"):
+                name = f"{choice1['Name']}"
+                code = f"{choice1['Name']}"
+                price = choice1['Price']
+                additional_data = {"choice1id": choice1['Id'],"choice2id": 0, "code":code, "price":price}
+                option1.append({"name": name, "price": price, "additional_data":additional_data})
+
+    for option in product.get("options",[]):
+        option2.append({"name": option.get("Name"),"price": 0, "additional_data": {"choice1id":0, "choice2id":0, "price": 0}})
+
+    options = []
+    productPrice = product.get("Price",0)
+
+    if (len(option1)>0):
+        option1.sort(key=getPrice)
+        if product.get("Price",0) == 0 and  len(option1)>0 and  option1[0].get("price",0)>0:
+            basePrice = option1[0].get("price")
+            productPrice = basePrice
+            for op in option1:
+                op["price"] = op["price"] - basePrice
+        options.append({"group_name": "Seçenek 1","id":"SC1", "options":option1})
+    if(len(option2)>0):
+        option2.sort(key=getPrice)
+        options.append({"group_name":"Seçenek2","id":"SC2" ,"options":option2})
+
+
+    return {"id":product.get("Id"),"name": product.get("ProductName"), "category": product.get("ProductGroup"), "code": product.get("ProductCode",""), "price": productPrice, "vat": product.get("VatRate",8),
+        "options": options}
+
+def getPrice(optionVal):
+    return optionVal.get("price")
+
 def post_product_to_remote(token, product):
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.post(REMOTE_URL, json=product, headers=headers)
+    response = requests.post(REMOTE_API_URL, json=product, headers=headers)
 
     if response.status_code == 200:
         print(f"Ürün başarıyla gönderildi: {product['ProductName']}")
     else:
         print(f"Ürün gönderimi başarısız oldu: {product['ProductName']}")
 
+def read_demo_file():
+    f = open('data.json')
+    data = json.load(f)
+    return data
+
 def main():
-    login()
-    products = get_product_list()
+    remote_login()
+    # login()
+    print("***"*10)
+    products = read_demo_file()  # get_product_list()
     print(f"{len(products)} adet ürün bulundu...")
 
+    temp_json = ""
+    count =0
+
     for product in products:
-        post_product_to_remote(REMOTE_TOKEN, product)
+        if product.get("ProductGroup","$")[0:1] != "$" :
+            temp_json += "," + json.dumps(prepare_product(product))
+            count +=1
+
+    print(f"--> {count}")
+
+    f = open("temp.json","w")
+    f.write("[" + temp_json[1:] + "]")
+        # post_product_to_remote(REMOTE_TOKEN, product)
 
 if __name__ == "__main__":
     main()

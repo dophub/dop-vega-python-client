@@ -1,0 +1,652 @@
+[
+  {
+    "Id": 5226,
+    "ProductName": "TRUF",
+    "ProductGroup": "KASA ONU",
+    "ProductCode": "00000",
+    "Order": "30201",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "PERAKENDE",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7484,
+        "ProductId": 5226,
+        "Name": "SUTLU",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7485,
+        "ProductId": 5226,
+        "Name": "BITTER",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7486,
+        "ProductId": 5226,
+        "Name": "H.CEVIZLI",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [
+      {
+        "Id": 4293,
+        "ProductId": 5226,
+        "Choice1Id": 7484,
+        "Name": "4 ADET",
+        "Price": 28,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4294,
+        "ProductId": 5226,
+        "Choice1Id": 7484,
+        "Name": "250 GR",
+        "Price": 133,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4295,
+        "ProductId": 5226,
+        "Choice1Id": 7484,
+        "Name": "1 ADET",
+        "Price": 7.5,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4296,
+        "ProductId": 5226,
+        "Choice1Id": 7485,
+        "Name": "1 ADET",
+        "Price": 7.5,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4297,
+        "ProductId": 5226,
+        "Choice1Id": 7485,
+        "Name": "4 ADET",
+        "Price": 28,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4298,
+        "ProductId": 5226,
+        "Choice1Id": 7485,
+        "Name": "250 GR",
+        "Price": 133,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4299,
+        "ProductId": 5226,
+        "Choice1Id": 7486,
+        "Name": "4 ADET",
+        "Price": 28,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4300,
+        "ProductId": 5226,
+        "Choice1Id": 7486,
+        "Name": "250 GR",
+        "Price": 133,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4301,
+        "ProductId": 5226,
+        "Choice1Id": 7486,
+        "Name": "1 ADET",
+        "Price": 7.5,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "options": []
+  },
+  {
+    "Id": 5227,
+    "ProductName": "ICED LOTUS LATTE",
+    "ProductGroup": "SOGUK KAHVELER",
+    "ProductCode": "00000",
+    "Order": "20702",
+    "Price": 59,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "ICECEKLER",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7487,
+        "ProductId": 5227,
+        "Name": "LARGE(500ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 5228,
+    "ProductName": "PARA CIKOLATA",
+    "ProductGroup": "$KASA ONU",
+    "ProductCode": "00000",
+    "Order": "30202",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "PERAKENDE",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7488,
+        "ProductId": 5228,
+        "Name": "SUTLU",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7489,
+        "ProductId": 5228,
+        "Name": "BITTER",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7490,
+        "ProductId": 5228,
+        "Name": "BEYAZ",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [
+      {
+        "Id": 4302,
+        "ProductId": 5228,
+        "Choice1Id": 7488,
+        "Name": "250 GR",
+        "Price": 58,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4303,
+        "ProductId": 5228,
+        "Choice1Id": 7489,
+        "Name": "250 GR",
+        "Price": 58,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4304,
+        "ProductId": 5228,
+        "Choice1Id": 7490,
+        "Name": "250 GR",
+        "Price": 58,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "options": []
+  },
+  {
+    "Id": 5229,
+    "ProductName": "WASA",
+    "ProductGroup": "KASA ONU",
+    "ProductCode": "00000",
+    "Order": "30203",
+    "Price": 18,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "PERAKENDE",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 5230,
+    "ProductName": "TURK KAHVESI GELENEKSEL (250 GR)",
+    "ProductGroup": "PERAKENDE",
+    "ProductCode": "00000",
+    "Order": "30302",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "PERAKENDE",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7491,
+        "ProductId": 5230,
+        "Name": "TENEKE",
+        "Price": 75,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 5231,
+    "ProductName": "DEMLEME CAY PERSONEL",
+    "ProductGroup": "PERSONEL",
+    "ProductCode": "00000",
+    "Order": "40101",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "ICECEKLER",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": null,
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7492,
+        "ProductId": 5231,
+        "Name": "KARTON SMALL (200ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7493,
+        "ProductId": 5231,
+        "Name": "KUPA (200ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 5232,
+    "ProductName": "FILTRE KAHVE PERSONEL",
+    "ProductGroup": "PERSONEL",
+    "ProductCode": "00000",
+    "Order": "40102",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "ICECEKLER",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": null,
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7494,
+        "ProductId": 5232,
+        "Name": "SADE",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7495,
+        "ProductId": 5232,
+        "Name": "SUTLU",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [
+      {
+        "Id": 4305,
+        "ProductId": 5232,
+        "Choice1Id": 7494,
+        "Name": "KUPA(300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4306,
+        "ProductId": 5232,
+        "Choice1Id": 7494,
+        "Name": "MEDIUM(300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4307,
+        "ProductId": 5232,
+        "Choice1Id": 7495,
+        "Name": "MEDIUM(300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 4308,
+        "ProductId": 5232,
+        "Choice1Id": 7495,
+        "Name": "KUPA(300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "options": []
+  },
+  {
+    "Id": 5233,
+    "ProductName": "LATTE PERSONEL",
+    "ProductGroup": "PERSONEL",
+    "ProductCode": "00000",
+    "Order": "40203",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "ICECEKLER",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7496,
+        "ProductId": 5233,
+        "Name": "SMALL(200ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7497,
+        "ProductId": 5233,
+        "Name": "MEDIUM(300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7498,
+        "ProductId": 5233,
+        "Name": "LARGE(400ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7499,
+        "ProductId": 5233,
+        "Name": "KUPA (300ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 5234,
+    "ProductName": "BLENDER",
+    "ProductGroup": "$PERAKENDE",
+    "ProductCode": "00000",
+    "Order": "30319",
+    "Price": 0,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "PERAKENDE",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 7500,
+        "ProductId": 5234,
+        "Name": "BLENDER(1,5L PC JAR W) otomatik--TM-800A",
+        "Price": 9900,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7501,
+        "ProductId": 5234,
+        "Name": "KEF BLENDER SES YALITIM HAZNESI--QS",
+        "Price": 2490,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7502,
+        "ProductId": 5234,
+        "Name": "KEF BAR BLENDER(1.5L PC JAR)--TM-767A",
+        "Price": 6950,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 7503,
+        "ProductId": 5234,
+        "Name": "BLENDER INOX VITA MINI ",
+        "Price": 450,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [],
+    "options": []
+  },
+  {
+    "Id": 10205,
+    "ProductName": "CHEMEX 1 CUP",
+    "ProductGroup": "UCUNCU NESIL DEMLEME",
+    "ProductCode": "00000",
+    "Order": "20203",
+    "Price": 53,
+    "VatRate": 8,
+    "FreeItem": false,
+    "InvoiceName": "ICECEKLER",
+    "ProductType": "Normal",
+    "Plu": "",
+    "SkipOptionSelection": false,
+    "Favorites": "",
+    "Aktarildi": true,
+    "IsSynced": null,
+    "IsUpdated": null,
+    "choice1s": [
+      {
+        "Id": 14549,
+        "ProductId": 10205,
+        "Name": "BRASIL SANTOS",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 14550,
+        "ProductId": 10205,
+        "Name": "PERU",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 14551,
+        "ProductId": 10205,
+        "Name": "GUATEMALA",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "choice2s": [
+      {
+        "Id": 10267,
+        "ProductId": 10205,
+        "Choice1Id": 14549,
+        "Name": "KUPA(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 10268,
+        "ProductId": 10205,
+        "Choice1Id": 14549,
+        "Name": "MEDIUM(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 10269,
+        "ProductId": 10205,
+        "Choice1Id": 14550,
+        "Name": "KUPA(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 10270,
+        "ProductId": 10205,
+        "Choice1Id": 14550,
+        "Name": "MEDIUM(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 10271,
+        "ProductId": 10205,
+        "Choice1Id": 14551,
+        "Name": "KUPA(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      },
+      {
+        "Id": 10272,
+        "ProductId": 10205,
+        "Choice1Id": 14551,
+        "Name": "MEDIUM(330ML)",
+        "Price": 0,
+        "Aktarildi": true,
+        "IsSynced": null,
+        "IsUpdated": null
+      }
+    ],
+    "options": []
+  }
+]
