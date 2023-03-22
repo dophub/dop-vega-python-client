@@ -17,7 +17,10 @@ def login():
     username = os.getenv("USERNAME")
     password = os.getenv("PASSWORD")
 
+    print(f"login endpoint {login_endpoint}")
+
     response = requests.post(login_endpoint, json={"username": username, "password": password})
+    print(response.status_code)
     
     if response.status_code == 200:
         global_token = response.json()["token"]
