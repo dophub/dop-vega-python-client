@@ -37,7 +37,7 @@ def get_product_list():
     response = requests.get(product_list_endpoint, headers=headers)
 
     if response.status_code == 200:
-        return response.json().get("all_items", [])
+        return response.json().get("allItems", [])
     elif response.status_code == 500:
         print("Yeniden giriş yapılıyor...")
         login()
