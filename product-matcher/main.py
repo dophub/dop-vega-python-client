@@ -57,6 +57,7 @@ def post_product_to_remote(token, product):
 def main():
     login()
     products = get_product_list()
+    print(f"{len(products)} adet ürün bulundu...")
 
     for product in products:
         post_product_to_remote(REMOTE_TOKEN, product)
