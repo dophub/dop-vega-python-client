@@ -18,6 +18,8 @@ def login():
     password = os.getenv("PASSWORD")
 
     print(f"login endpoint {login_endpoint}")
+    print(f"user: {username}")
+    print(f"psw: {password}")
 
     response = requests.post(login_endpoint, json={"username": username, "password": password})
     print(response.status_code)
