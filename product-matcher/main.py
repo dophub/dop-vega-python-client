@@ -41,7 +41,6 @@ def login():
 
     print(f"login endpoint {login_endpoint}")
     print(f"user: {username}")
-    print(f"psw: {password}")
 
     response = requests.post(login_endpoint, json={"username": username, "password": password})
     print(response.status_code)
@@ -153,10 +152,9 @@ def getPrice(optionVal):
     return optionVal.get("price")
 
 def post_product_to_remote(token, product):
-    print(f"{REMOTE_API_URL}/publicapi/product")
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.post(f"{REMOTE_API_URL}/publicapi/product", json=product, headers=headers)
-    print(response.status_code)
+    print(product['Name'],':',response.status_code)
 
     if response.status_code != 200:
         print(f"Ürün gönderimi başarısız oldu: {product['name']}")
@@ -178,20 +176,20 @@ def main():
 
     print(f"{len(products)} adet ürün bulundu...")
 
-    temp_json = ""
+    # temp_json = ""
     count =0
 
     for product in products:
         if product.get("ProductGroup","$")[0:1] != "$" :
             prepared_product = prepare_product(product)
-            temp_json += "," + json.dumps(prepared_product)
+            # temp_json += "," + json.dumps(prepared_product)
             count +=1
             post_product_to_remote(global_remote_token, prepared_product)
 
-    print(f"--> {count}")
+    print(f"-->Toplam Aktarılan: {count}")
 
-    f = open("temp.json","w")
-    f.write("[" + temp_json[1:] + "]")
+    # f = open("temp.json","w")
+    # f.write("[" + temp_json[1:] + "]")
 
 if __name__ == "__main__":
     main()
