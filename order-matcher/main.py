@@ -267,7 +267,9 @@ def process_orders(orders):
         response = requests.get(get_order_url, headers=headers, json={"billHeaderId": bill_id})
 
         if response.status_code == 200:
-            data = response.json()["data"]
+            print(response.json(),'------'*23)
+            data = response.json()
+            data = data.get("data")
             if data["BillState"] == 1:
                 accept_order_url = f"{REMOTE_API_URL}/publicapi/product/accept-table/{bill_id}"
                 response = requests.post(accept_order_url, headers=remote_headers)
