@@ -272,8 +272,8 @@ def process_orders(orders):
             data = data.get("data")[0]
             if data["BillState"] == 1:
                 accept_order_url = f"{REMOTE_API_URL}/publicapi/product/accept-table/{service_id}"
-                response = requests.post(accept_order_url, headers=remote_headers)
-                print(f"Remote APi Response: {response.status_code}")
+                response = requests.get(accept_order_url, headers=remote_headers)
+                print(f"Remote APi Response: {response.status_code} {REMOTE_API_URL}")
                 if response.status_code != 200:
                     print(f"Error accepting order {bill_id}: {response.status_code}")
                 else:
