@@ -153,13 +153,13 @@ def getPrice(optionVal):
     return optionVal.get("price")
 
 def post_product_to_remote(token, product):
+    print(f"{REMOTE_API_URL}/publicapi/product")
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.post(REMOTE_API_URL, json=product, headers=headers)
+    response = requests.post(f"{REMOTE_API_URL}/publicapi/product", json=product, headers=headers)
+    print(response.status_code)
 
-    if response.status_code == 200:
-        print(f"Ürün başarıyla gönderildi: {product['ProductName']}")
-    else:
-        print(f"Ürün gönderimi başarısız oldu: {product['ProductName']}")
+    if response.status_code != 200:
+        print(f"Ürün gönderimi başarısız oldu: {product['name']}")
 
 def read_demo_file():
     f = open('data.json')
@@ -167,10 +167,15 @@ def read_demo_file():
     return data
 
 def main():
+    global global_remote_token
     remote_login()
-    # login()
-    print("***"*10)
-    products = read_demo_file()  # get_product_list()
+    login()
+    print("***"*50)
+    print(f"Global Token: {global_remote_token}")
+    
+    products =  get_product_list()
+    # products = read_demo_file() 
+
     print(f"{len(products)} adet ürün bulundu...")
 
     temp_json = ""
@@ -178,14 +183,15 @@ def main():
 
     for product in products:
         if product.get("ProductGroup","$")[0:1] != "$" :
-            temp_json += "," + json.dumps(prepare_product(product))
+            prepared_product = prepare_product(product)
+            temp_json += "," + json.dumps(prepared_product)
             count +=1
+            post_product_to_remote(global_remote_token, prepared_product)
 
     print(f"--> {count}")
 
     f = open("temp.json","w")
     f.write("[" + temp_json[1:] + "]")
-        # post_product_to_remote(REMOTE_TOKEN, product)
 
 if __name__ == "__main__":
     main()
