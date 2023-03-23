@@ -127,7 +127,7 @@ def prepare_product(product):
                 option1.append({"name": name, "price": price, "additional_data":additional_data})
 
     for option in product.get("options",[]):
-        option2.append({"name": option.get("Name"),"price": 0, "additional_data": {"choice1id":0, "choice2id":0, "price": 0}})
+        option2.append({"name": option.get("Name"),"price": 0, "additional_data": {"code":option.get("Name","") ,"choice1id":0, "choice2id":0, "price": 0}})
 
     options = []
     productPrice = product.get("Price",0)
@@ -170,14 +170,18 @@ def main():
     login()
     print("***"*50)
     print(f"Global Token: {global_remote_token}")
+    print("*"*20, "ÜRÜNLER ÇEKİLİYOR" , "*"*20)
     
     products =  get_product_list()
+    total_products: int = len(products)
     # products = read_demo_file() 
-
-    print(f"{len(products)} adet ürün bulundu...")
+    print(f"Toplam Ürün Sayısı:{total_products} adet ürün bulundu...")
 
     # temp_json = ""
     count =0
+
+
+    print("*"*20, "ÜRÜNLER ÇEKİLDİ - SUNUCUYA AKTARILIYOR" , "*"*20)
 
     for product in products:
         if product.get("ProductGroup","$")[0:1] != "$" :
@@ -185,6 +189,7 @@ def main():
             # temp_json += "," + json.dumps(prepared_product)
             count +=1
             post_product_to_remote(global_remote_token, prepared_product)
+            print(f"{count}/{total_products}")
 
     print(f"-->Toplam Aktarılan: {count}")
 
