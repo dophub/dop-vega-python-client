@@ -154,7 +154,7 @@ def getPrice(optionVal):
 def post_product_to_remote(token, product):
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.post(f"{REMOTE_API_URL}/publicapi/product", json=product, headers=headers)
-    print(product['Name'],':',response.status_code)
+    print(product['name'],':',response.status_code)
 
     if response.status_code != 200:
         print(f"Ürün gönderimi başarısız oldu: {product['name']}")
