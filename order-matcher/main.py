@@ -290,8 +290,8 @@ def main():
     local_login()
     create_tables()
 
-    delete_all_orders()
-    reset_last_value()
+    # delete_all_orders()
+    # reset_last_value()
 
     while True:
 
