@@ -124,7 +124,7 @@ def send_orders_to_local_api(orders):
     try:
         print(len(orders),"---------")
         headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
-        local_api_url = f"{API_URL}sefim/forex/create-order-table"
+        local_api_url = f"{API_URL}/sefim/forex/create-order-table"
 
         order_data = []
 
