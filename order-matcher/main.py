@@ -114,6 +114,7 @@ def save_orders(order, bill_id):
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
 
+    print('---', order,'*'*22)
     cursor.execute("INSERT INTO orders (service_id, bill_id, order_status) VALUES (?, ?,0)", (order["service_id"],bill_id,))
 
     conn.commit()
@@ -181,9 +182,11 @@ def send_orders_to_local_api(orders):
         print("-"*55)
         print(order_data)
         print("-"*55)
+        print(local_api_url)
 
         for od in order_data:
             response = requests.post(local_api_url, json=od, headers=headers)
+            print(f"---> Order Data Response: {response.status_code}")
             if response.status_code != 200:
                 print(f"Error sending API: {response.status_code}")
             else:
