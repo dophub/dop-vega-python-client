@@ -1,9 +1,12 @@
-
+import sys
+import ctypes
 import os
 import time
 import requests
 import sqlite3
 from dotenv import load_dotenv
+import pystray
+from PIL import Image
 
 load_dotenv()
 
@@ -283,9 +286,19 @@ def process_orders(orders):
 
 
 
+mutex_name = "dop_vega_order_matcher"
 
 
 def main():
+
+    try:
+        mutex = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
+        if ctypes.windll.kernel32.GetLastError() == 183:
+            print("Program açık")
+            sys.exit()
+    except:
+        pass
+
     remote_login()
     local_login()
     create_tables()
@@ -312,6 +325,23 @@ def main():
         print_orders()
 
         time.sleep(10)
+
+def on_activate(icon, item):
+    # İkon'a tıklandığında yapılacak işlemler
+    pass
+
+def exit_action(icon, item):
+    icon.stop()
+
+def create_icon():
+    image = Image.open("sip.png")
+    menu = (
+        pystray.MenuItem("Sipairşim", on_activate),
+        pystray.MenuItem("Çıkış", exit_action)
+    )
+
+    icon = pystray.Icon("name", image, "Sipairşim+", menu)
+    icon.run()
 
 if __name__ == "__main__":
     main()
