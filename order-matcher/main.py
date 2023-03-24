@@ -346,8 +346,9 @@ def create_icon(main_func):
     icon = pystray.Icon("name", image, "Sipairşim", menu)
 
     def start_main_func(icon, main_func):
+        icon.visible=True
         main_func()
-        # icon.stop()
+        icon.stop()
 
     icon.run(setup=lambda icon: threading.Thread(target=start_main_func, args=(icon, main_func)).start())
 
