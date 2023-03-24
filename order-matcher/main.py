@@ -347,7 +347,7 @@ def create_icon(main_func):
 
     def start_main_func(icon, main_func):
         main_func()
-        icon.stop()
+        # icon.stop()
 
     icon.run(setup=lambda icon: threading.Thread(target=start_main_func, args=(icon, main_func)).start())
 
