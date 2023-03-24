@@ -344,4 +344,5 @@ def create_icon():
     icon.run()
 
 if __name__ == "__main__":
+    create_icon()
     main()
