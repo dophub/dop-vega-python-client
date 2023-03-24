@@ -328,11 +328,11 @@ def main():
         time.sleep(10)
 
 def on_activate(icon, item):
-    # İkon'a tıklandığında yapılacak işlemler
     pass
 
 def exit_action(icon, item):
     icon.stop()
+    sys.exit()
 
 def create_icon(main_func):
     # İkon görüntüsü
@@ -343,12 +343,12 @@ def create_icon(main_func):
         pystray.MenuItem("Çıkış", exit_action)
     )
 
-    icon = pystray.Icon("name", image, "Sipairşim", menu)
+    icon = pystray.Icon("name", image, "Siparişim", menu)
 
     def start_main_func(icon, main_func):
         icon.visible=True
         main_func()
-        icon.stop()
+        # icon.stop()
 
     icon.run(setup=lambda icon: threading.Thread(target=start_main_func, args=(icon, main_func)).start())
 
