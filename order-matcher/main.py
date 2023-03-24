@@ -10,7 +10,7 @@ from PIL import Image
 import threading
 
 load_dotenv()
-
+exit_program = False
 API_URL = os.getenv("API_URL")
 REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
 
@@ -306,8 +306,9 @@ def main():
 
     # delete_all_orders()
     # reset_last_value()
+    global exit_program
 
-    while True:
+    while not exit_program:
 
 
         unprocessed_orders = fetch_unprocessed_orders()
@@ -332,7 +333,8 @@ def on_activate(icon, item):
 
 def exit_action(icon, item):
     icon.stop()
-    sys.exit()
+    global exit_program
+    exit_program = True
 
 def create_icon(main_func):
     # İkon görüntüsü
