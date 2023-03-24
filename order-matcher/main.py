@@ -7,6 +7,7 @@ import sqlite3
 from dotenv import load_dotenv
 import pystray
 from PIL import Image
+import threading
 
 load_dotenv()
 
@@ -333,16 +334,23 @@ def on_activate(icon, item):
 def exit_action(icon, item):
     icon.stop()
 
-def create_icon():
+def create_icon(main_func):
+    # İkon görüntüsü
     image = Image.open("sip.png")
+
     menu = (
-        pystray.MenuItem("Sipairşim", on_activate),
+        pystray.MenuItem("Uygulama", on_activate),
         pystray.MenuItem("Çıkış", exit_action)
     )
 
-    icon = pystray.Icon("name", image, "Sipairşim+", menu)
-    icon.run()
+    icon = pystray.Icon("name", image, "Sipairşim", menu)
+
+    def start_main_func(icon, main_func):
+        main_func()
+        icon.stop()
+
+    icon.run(setup=lambda icon: threading.Thread(target=start_main_func, args=(icon, main_func)).start())
 
 if __name__ == "__main__":
-    create_icon()
-    main()
+    create_icon(main)
+
