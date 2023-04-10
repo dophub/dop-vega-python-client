@@ -174,7 +174,7 @@ def post_product_to_remote(token, product):
         print(f"Ürün gönderimi başarısız oldu: {product['name']}")
 
 
-def post_product_deactivate_to_remote(token, product_id: int):
+def post_product_deactivate_to_remote(token, product_id: str):
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.get(
         f"{REMOTE_API_URL}/publicapi/deactivate/product/{product_id}", headers=headers)
@@ -218,7 +218,7 @@ def main():
         else:
             print(f"Ürün grubu $ ile başlıyor. Ürün pasif yapılıyor: {product.get('ProductName')}")
             product_id: int = product.get("Id")
-            post_product_deactivate_to_remote(global_remote_token, product_id)
+            post_product_deactivate_to_remote(global_remote_token, str(product_id))
 
     print(f"-->Toplam Aktarılan: {count}")
 
