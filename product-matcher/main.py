@@ -209,14 +209,14 @@ def main():
     print("*"*20, "ÜRÜNLER ÇEKİLDİ - SUNUCUYA AKTARILIYOR", "*"*20)
 
     for product in products:
+        count += 1
         if product.get("ProductGroup", "$")[0:1] != "$":
             prepared_product = prepare_product(product)
             # temp_json += "," + json.dumps(prepared_product)
-            count += 1
             post_product_to_remote(global_remote_token, prepared_product)
             print(f"{count}/{total_products}")
         else:
-            print(f"Ürün grubu $ ile başlıyor. Ürün pasif yapılıyor: {product.get('ProductName')}")
+            # print(f"Ürün grubu $ ile başlıyor. Ürün pasif yapılıyor: {product.get('ProductName')}")
             product_id: int = product.get("Id")
             post_product_deactivate_to_remote(global_remote_token, str(product_id))
 
