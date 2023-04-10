@@ -177,7 +177,7 @@ def post_product_to_remote(token, product):
 def post_product_deactivate_to_remote(token, product_id: str):
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.get(
-        f"{REMOTE_API_URL}/publicapi/deactivate/product/{product_id}", headers=headers)
+        f"{REMOTE_API_URL}/publicapi/product/deactivate/{product_id}", headers=headers)
     print(f"Deactivating : {product_id}", response.status_code)
 
     if response.status_code != 200:
