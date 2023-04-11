@@ -244,7 +244,7 @@ def print_orders():
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM orders")
+    cursor.execute("SELECT * FROM orders WHERE order_status = 0")
     orders = cursor.fetchall()
 
     print("Local orders table contents:")

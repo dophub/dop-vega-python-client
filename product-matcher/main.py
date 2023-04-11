@@ -196,7 +196,7 @@ def main():
     login()
     print("***"*50)
     print(f"Global Token: {global_remote_token}")
-    print("*"*20, "ÜRÜNLER ÇEKİLİYOR", "*"*20)
+    print("*"*20, "-ÜRÜNLER VEGADAN ÇEKİLİYOR-", "*"*20)
 
     products = get_product_list()
     total_products: int = len(products)
