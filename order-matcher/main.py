@@ -156,7 +156,7 @@ def close_local_order(bill_id: int,amount:float, table_name: str, customer_name:
             "Debit":0,
             "CustomerName":customer_name,
             "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M"),
-            "ReceivedByUserName":"",
+            "ReceivedByUserName":"SIPARISIM",
             "HeaderId":bill_id,
             "DiscountReason":"",
             "PersonName":"",
@@ -219,8 +219,7 @@ def send_orders_to_local_api(orders):
                     elif lo.get("group_code", "") == "SC2":
                         code2 = integration_additional_data.get("code", "")
 
-                product_items.append(
-                    {
+                items_model = {
                         "ProductName": f"{local_product_name}.{code}",
                         "ProductId": int(local_product_code),
                         "Choice1Id": choice1Id,
@@ -230,7 +229,11 @@ def send_orders_to_local_api(orders):
                         "Quantity": count,
                         "Comment": "",
                         "OrginalPrice": 0
-                    })
+                    }
+                if choice2Id>0:
+                    items_model["Choice2Id"] = choice2Id
+
+                product_items.append(items_model)
 
             prepared_data = {
                 "PhoneNumber": order.get("mobile_phone", ""),
@@ -266,6 +269,7 @@ def send_orders_to_local_api(orders):
 
     except Exception as err:
         print(err)
+        print("******* ORDER PREPARE",)
         pass
 
 
@@ -379,11 +383,11 @@ def main():
 
     while not exit_program:
 
-        #! unprocessed_orders = fetch_unprocessed_orders()
-        #! process_orders(unprocessed_orders)
+        # unprocessed_orders = fetch_unprocessed_orders()
+        # process_orders(unprocessed_orders)
 
         last_service_id = get_last_service_id()
-        print("###########----------->", last_service_id, "------")
+        print("V2 - ###########----------->", last_service_id, "------")
         orders = fetch_orders(last_service_id)
 
         if orders:
@@ -392,7 +396,7 @@ def main():
             max_service_id = max(order["service_id"] for order in orders)
             update_last_service_id(max_service_id)
 
-        #! print_orders()
+        # print_orders()
         time.sleep(10)
 
 
