@@ -392,8 +392,7 @@ def main():
             max_service_id = max(order["service_id"] for order in orders)
             update_last_service_id(max_service_id)
 
-        print_orders()
-
+        #! print_orders()
         time.sleep(10)
 
 
