@@ -156,7 +156,7 @@ def close_local_order(bill_id: int,amount:float, table_name: str, customer_name:
             "Debit":0,
             "CustomerName":customer_name,
             "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M"),
-            "ReceivedByUserName":"SIPARISIM",
+            "ReceivedByUserName":"",
             "HeaderId":bill_id,
             "DiscountReason":"",
             "PersonName":"",
@@ -224,15 +224,12 @@ def send_orders_to_local_api(orders):
                         "ProductId": int(local_product_code),
                         "Choice1Id": choice1Id,
                         "Choice2Id": choice2Id,
-                        # "Options": code2,
+                        "Options": code2,
                         "Price": item_price,
                         "Quantity": count,
                         "Comment": "",
                         "OrginalPrice": 0
                     }
-                if code2!="":
-                    items_model["Options"] = code2
-
                 product_items.append(items_model)
 
             prepared_data = {
@@ -269,7 +266,6 @@ def send_orders_to_local_api(orders):
 
     except Exception as err:
         print(err)
-        print("******* ORDER PREPARE",)
         pass
 
 
