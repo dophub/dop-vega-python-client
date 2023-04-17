@@ -156,7 +156,7 @@ def close_local_order(bill_id: int,amount:float, table_name: str, customer_name:
             "Debit":0,
             "CustomerName":customer_name,
             "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M"),
-            "ReceivedByUserName":"",
+            "ReceivedByUserName":"SIPARISIM",
             "HeaderId":bill_id,
             "DiscountReason":"",
             "PersonName":"",
