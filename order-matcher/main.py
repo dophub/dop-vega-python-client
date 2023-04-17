@@ -223,15 +223,15 @@ def send_orders_to_local_api(orders):
                         "ProductName": f"{local_product_name}.{code}",
                         "ProductId": int(local_product_code),
                         "Choice1Id": choice1Id,
-                        # "Choice2Id": choice2Id,
-                        "Options": code2,
+                        "Choice2Id": choice2Id,
+                        # "Options": code2,
                         "Price": item_price,
                         "Quantity": count,
                         "Comment": "",
                         "OrginalPrice": 0
                     }
-                if choice2Id>0:
-                    items_model["Choice2Id"] = choice2Id
+                if code2!="":
+                    items_model["Options"] = code2
 
                 product_items.append(items_model)
 
