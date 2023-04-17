@@ -379,8 +379,8 @@ def main():
 
     while not exit_program:
 
-        unprocessed_orders = fetch_unprocessed_orders()
-        process_orders(unprocessed_orders)
+        #! unprocessed_orders = fetch_unprocessed_orders()
+        #! process_orders(unprocessed_orders)
 
         last_service_id = get_last_service_id()
         print("###########----------->", last_service_id, "------")
