@@ -139,7 +139,7 @@ def save_orders(order, bill_id):
     conn.close()
 
 
-def close_local_order(bill_id: int,amount:float, table_name: str, customer_name: str ):
+def close_local_order(bill_id: int, amount: float, table_name: str, customer_name: str):
     """
     bill_id, amount, table_name, customer_name,
     """
@@ -147,39 +147,40 @@ def close_local_order(bill_id: int,amount:float, table_name: str, customer_name:
         headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
         local_api_url = f"{API_URL}/sefim/forex/create-payment"
         prepared_data = {
-            "TableNo":table_name,
-            "CashPayment":0,
-            "CreditPayment":0,
-            "TicketPayment":0,
-            "OnlinePayment":amount,
-            "Discount":0,
-            "Debit":0,
-            "CustomerName":customer_name,
+            "TableNo": table_name,
+            "CashPayment": 0,
+            "CreditPayment": 0,
+            "TicketPayment": 0,
+            "OnlinePayment": amount,
+            "Discount": 0,
+            "Debit": 0,
+            "CustomerName": customer_name,
             "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M"),
-            "ReceivedByUserName":"SIPARISIM",
-            "HeaderId":bill_id,
-            "DiscountReason":"",
-            "PersonName":"",
-            "InvoiceNo":"",
-            "IdentificationNo":"",
-            "OnlineOdeme":"",
-            "Description":"",
-            "KrediKarti":"",
-            "YemekKarti":"",
-            "Deliverer":"",
-            "PaymentDetails":[
+            "ReceivedByUserName": "SIPARISIM",
+            "HeaderId": bill_id,
+            "DiscountReason": "",
+            "PersonName": "",
+            "InvoiceNo": "",
+            "IdentificationNo": "",
+            "OnlineOdeme": "",
+            "Description": "",
+            "KrediKarti": "",
+            "YemekKarti": "",
+            "Deliverer": "",
+            "PaymentDetails": [
                 {
-                    "PaymentType":"Online",
-                    "PaymentMethod":"Online",
-                    "Amount":amount,
-                    "PaymentTime":date.today().strftime("%Y-%m-%d %H:%M")
+                    "PaymentType": "Online",
+                    "PaymentMethod": "Online",
+                    "Amount": amount,
+                    "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M")
                 }
             ]
         }
 
         print(prepared_data)
 
-        response = requests.post(local_api_url, json=prepared_data, headers=headers)
+        response = requests.post(
+            local_api_url, json=prepared_data, headers=headers)
         print(f"---> Order Data Response: {response.status_code}")
         if response.status_code != 200:
             print(f"Masa Kapatılamadı: {response.status_code}")
@@ -220,16 +221,16 @@ def send_orders_to_local_api(orders):
                         code2 = integration_additional_data.get("code", "")
 
                 items_model = {
-                        "ProductName": f"{local_product_name}.{code}",
-                        "ProductId": int(local_product_code),
-                        "Choice1Id": choice1Id,
-                        "Choice2Id": choice2Id,
-                        "Options": code2,
-                        "Price": item_price,
-                        "Quantity": count,
-                        "Comment": "",
-                        "OrginalPrice": 0
-                    }
+                    "ProductName": f"{local_product_name}.{code}",
+                    "ProductId": int(local_product_code),
+                    "Choice1Id": choice1Id,
+                    "Choice2Id": choice2Id,
+                    "Options": code2,
+                    "Price": item_price,
+                    "Quantity": count,
+                    "Comment": "",
+                    "OrginalPrice": 0
+                }
                 product_items.append(items_model)
 
             prepared_data = {
@@ -262,7 +263,8 @@ def send_orders_to_local_api(orders):
             else:
                 _data = response.json()
                 # save_orders(od, _data.get("BillHeaderId", 0))
-                close_local_order(_data.get("BillHeaderId", 0), od.get("Price",0), od.get("TableNumber"), od.get("CustomerName"))
+                # close_local_order(_data.get("BillHeaderId", 0), od.get(
+                    # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
 
     except Exception as err:
         print(err)

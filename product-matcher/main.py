@@ -151,7 +151,7 @@ def prepare_product(product):
                 op["price"] = op["price"] - basePrice
         options.append({"group_name": "Seçenek 1",
                        "id": "SC1", "options": option1})
-    if(len(option2) > 0):
+    if (len(option2) > 0):
         option2.sort(key=getPrice)
         options.append({"group_name": "Seçenek2",
                        "id": "SC2", "options": option2})
@@ -218,7 +218,8 @@ def main():
         else:
             # print(f"Ürün grubu $ ile başlıyor. Ürün pasif yapılıyor: {product.get('ProductName')}")
             product_id: int = product.get("Id")
-            post_product_deactivate_to_remote(global_remote_token, str(product_id))
+            post_product_deactivate_to_remote(
+                global_remote_token, str(product_id))
 
     print(f"-->Toplam Aktarılan: {count}")
 
