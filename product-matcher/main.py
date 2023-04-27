@@ -212,6 +212,7 @@ def main():
         count += 1
         if product.get("ProductGroup", "$")[0:1] != "$":
             prepared_product = prepare_product(product)
+            prepared_product["is_active"] = True
             # temp_json += "," + json.dumps(prepared_product)
             post_product_to_remote(global_remote_token, prepared_product)
             print(f"{count}/{total_products}")
