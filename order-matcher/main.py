@@ -189,87 +189,87 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
 
 
 def send_orders_to_local_api(orders):
-    try:
-        print(len(orders), "---------")
-        headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
-        local_api_url = f"{API_URL}/sefim/forex/create-order-table"
+    # try:
+    print(len(orders), "---------")
+    headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
+    local_api_url = f"{API_URL}/sefim/forex/create-order-table"
 
-        order_data = []
+    order_data = []
 
-        for order in orders:
-            product_items = []
-            for item in order.get("orders", [])[0].get("items", []):
-                local_product_code = item.get("local_product_code", "")
-                local_product_name = item.get("local_product_name", "")
-                item_price = item.get("item_price", 0)
-                count = item.get("count", [])
-                local_options = item.get("local_options", [])
-                choice1Id = 0
-                choice2Id = 0
-                code = ""
-                code2 = ""
-                for lo in local_options:
-                    integration_additional_data = lo.get(
-                        "integration_additional_data", {})
-                    if lo.get("group_code") == "SC1":
-                        choice1Id = integration_additional_data.get(
-                            "choice1id", 0)
-                        choice2Id = integration_additional_data.get(
-                            "choice2id", 0)
-                        code = integration_additional_data.get("code", "")
-                    elif lo.get("group_code", "") == "SC2":
-                        code2 = integration_additional_data.get("code", "")
+    for order in orders:
+        product_items = []
+        for item in order.get("orders", [])[0].get("items", []):
+            local_product_code = item.get("local_product_code", "")
+            local_product_name = item.get("local_product_name", "")
+            item_price = item.get("item_price", 0)
+            count = item.get("count", [])
+            local_options = item.get("local_options", [])
+            choice1Id = 0
+            choice2Id = 0
+            code = ""
+            code2 = ""
+            for lo in local_options:
+                integration_additional_data = lo.get(
+                    "integration_additional_data", {})
+                if lo.get("group_code") == "SC1":
+                    choice1Id = integration_additional_data.get(
+                        "choice1id", 0)
+                    choice2Id = integration_additional_data.get(
+                        "choice2id", 0)
+                    code = integration_additional_data.get("code", "")
+                elif lo.get("group_code", "") == "SC2":
+                    code2 = integration_additional_data.get("code", "")
 
-                items_model = {
-                    "ProductName": f"{local_product_name}.{code}",
-                    "ProductId": int(local_product_code),
-                    "Choice1Id": choice1Id,
-                    "Choice2Id": choice2Id,
-                    "Options": code2,
-                    "Price": item_price,
-                    "Quantity": count,
-                    "Comment": "",
-                    "OrginalPrice": 0
-                }
-                product_items.append(items_model)
-
-            prepared_data = {
-                "PhoneNumber": order.get("mobile_phone", ""),
-                "TableNumber": order.get("first_name", "") + order.get("last_name", ""),
-                "Address": "",
-                "CustomerName": order.get("first_name", "") + " " + order.get("last_name", ""),
-                "OrderNo": "",
-                "CreatedByUserName": "Siparisim+",
-                "Discount": 0,
-                "PaymentDetail": "",
-                "UserName": "Siparisim+",
-                            "Bill": product_items,
-                            "ComputerName": "",
-                            "service_id": order.get("service_id"),
-                            "CustomerNote": order.get("orders")[0].get("order_note", "")
+            items_model = {
+                "ProductName": f"{local_product_name}.{code}",
+                "ProductId": int(local_product_code),
+                "Choice1Id": choice1Id,
+                "Choice2Id": choice2Id,
+                "Options": code2,
+                "Price": item_price,
+                "Quantity": count,
+                "Comment": "",
+                "OrginalPrice": 0
             }
-            order_data.append(prepared_data)
+            product_items.append(items_model)
 
-        print("-"*55)
-        print(order_data)
-        print("-"*55)
-        print(local_api_url)
+        prepared_data = {
+            "PhoneNumber": order.get("mobile_phone", ""),
+            "TableNumber": order.get("first_name", "") + order.get("last_name", ""),
+            "Address": "",
+            "CustomerName": order.get("first_name", "") + " " + order.get("last_name", ""),
+            "OrderNo": "",
+            "CreatedByUserName": "Siparisim+",
+            "Discount": 0,
+            "PaymentDetail": "",
+            "UserName": "Siparisim+",
+                        "Bill": product_items,
+                        "ComputerName": "",
+                        "service_id": order.get("service_id"),
+                        "CustomerNote": order.get("orders")[0].get("order_note", "")
+        }
+        order_data.append(prepared_data)
 
-        for od in order_data:
-            print(od)
-            response = requests.post(local_api_url, json=od, headers=headers)
-            print(f"---> Order Data Response: {response.status_code}")
-            if response.status_code != 200:
-                print(f"Error sending API: {response.status_code}")
-            else:
-                _data = response.json()
-                # save_orders(od, _data.get("BillHeaderId", 0))
-                # close_local_order(_data.get("BillHeaderId", 0), od.get(
-                    # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+    print("-"*55)
+    print(order_data)
+    print("-"*55)
+    print(local_api_url)
 
-    except Exception as err:
-        print(err)
-        pass
+    for od in order_data:
+        print(od)
+        response = requests.post(local_api_url, json=od, headers=headers)
+        print(f"---> Order Data Response: {response.status_code}")
+        if response.status_code != 200:
+            print(f"Error sending API: {response.status_code}")
+        else:
+            _data = response.json()
+            # save_orders(od, _data.get("BillHeaderId", 0))
+            # close_local_order(_data.get("BillHeaderId", 0), od.get(
+                # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+
+    # except Exception as err:
+    #     print(err)
+    #     pass
 
 
 def fetch_orders(last_service_id):
