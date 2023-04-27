@@ -265,9 +265,9 @@ def send_orders_to_local_api(orders):
             print(f"Error sending API: {response.status_code}")
         else:
             _data = response.json()
-            # save_orders(od, _data.get("BillHeaderId", 0))
-            # close_local_order(_data.get("BillHeaderId", 0), od.get(
-            # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+            save_orders(od, _data.get("BillHeaderId", 0))
+            close_local_order(_data.get("BillHeaderId", 0), od.get(
+                "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
 
     # except Exception as err:
     #     print(err)
