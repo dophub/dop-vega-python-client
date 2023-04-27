@@ -197,6 +197,7 @@ def send_orders_to_local_api(orders):
     order_data = []
 
     for order in orders:
+        print(order)
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
@@ -208,17 +209,18 @@ def send_orders_to_local_api(orders):
             choice2Id = 0
             code = ""
             code2 = ""
-            for lo in local_options:
-                integration_additional_data = lo.get(
-                    "integration_additional_data", {})
-                if lo.get("group_code") == "SC1":
-                    choice1Id = integration_additional_data.get(
-                        "choice1id", 0)
-                    choice2Id = integration_additional_data.get(
-                        "choice2id", 0)
-                    code = integration_additional_data.get("code", "")
-                elif lo.get("group_code", "") == "SC2":
-                    code2 = integration_additional_data.get("code", "")
+            if local_options is not None and len(local_options) > 0:
+                for lo in local_options:
+                    integration_additional_data = lo.get(
+                        "integration_additional_data", {})
+                    if lo.get("group_code") == "SC1":
+                        choice1Id = integration_additional_data.get(
+                            "choice1id", 0)
+                        choice2Id = integration_additional_data.get(
+                            "choice2id", 0)
+                        code = integration_additional_data.get("code", "")
+                    elif lo.get("group_code", "") == "SC2":
+                        code2 = integration_additional_data.get("code", "")
 
             items_model = {
                 "ProductName": f"{local_product_name}.{code}",
@@ -265,7 +267,7 @@ def send_orders_to_local_api(orders):
             _data = response.json()
             # save_orders(od, _data.get("BillHeaderId", 0))
             # close_local_order(_data.get("BillHeaderId", 0), od.get(
-                # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+            # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
 
     # except Exception as err:
     #     print(err)
