@@ -265,9 +265,9 @@ def send_orders_to_local_api(orders):
             print(f"Error sending API: {response.status_code}")
         else:
             _data = response.json()
-            save_orders(od, _data.get("BillHeaderId", 0))
-            # close_local_order(_data.get("BillHeaderId", 0), od.get(
-            # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+            # save_orders(od, _data.get("BillHeaderId", 0))
+            close_local_order(_data.get("BillHeaderId", 0), od.get(
+                "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
 
     # except Exception as err:
     #     print(err)
@@ -384,11 +384,11 @@ def main():
 
     while not exit_program:
 
-        unprocessed_orders = fetch_unprocessed_orders()
-        process_orders(unprocessed_orders)
+        # unprocessed_orders = fetch_unprocessed_orders()
+        # process_orders(unprocessed_orders)
 
         last_service_id = get_last_service_id()
-        print("V3 - ###########----------->", last_service_id, "------")
+        print("V4 - ###########----------->", last_service_id, "------")
         orders = fetch_orders(last_service_id)
 
         if orders:
@@ -397,7 +397,7 @@ def main():
             max_service_id = max(order["service_id"] for order in orders)
             update_last_service_id(max_service_id)
 
-        print_orders()
+        # print_orders()
         time.sleep(10)
 
 
