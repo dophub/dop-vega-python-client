@@ -226,7 +226,7 @@ def send_orders_to_local_api(orders):
                 "ProductName": f"{local_product_name}.{code}",
                 "ProductId": int(local_product_code),
                 "Choice1Id": choice1Id,
-                "Choice2Id": choice2Id,
+                "Choice2Id": choice2Id if choice2Id > 0 else -1,
                 "Options": code2,
                 "Price": item_price,
                 "Quantity": count,
