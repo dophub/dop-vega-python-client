@@ -205,8 +205,8 @@ def send_orders_to_local_api(orders):
             item_price = item.get("item_price", 0)
             count = item.get("count", [])
             local_options = item.get("local_options", [])
-            choice1Id = 0
-            choice2Id = 0
+            choice1Id = -1
+            choice2Id = -1
             code = ""
             code2 = ""
             if local_options is not None and len(local_options) > 0:
@@ -215,9 +215,9 @@ def send_orders_to_local_api(orders):
                         "integration_additional_data", {})
                     if lo.get("group_code") == "SC1":
                         choice1Id = integration_additional_data.get(
-                            "choice1id", 0)
+                            "choice1id", -1)
                         choice2Id = integration_additional_data.get(
-                            "choice2id", 0)
+                            "choice2id", -1)
                         code = integration_additional_data.get("code", "")
                     elif lo.get("group_code", "") == "SC2":
                         code2 = integration_additional_data.get("code", "")
