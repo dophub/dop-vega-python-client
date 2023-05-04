@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import pystray
 from PIL import Image
 import threading
-from datetime import date
+from datetime import date, datetime
 
 load_dotenv()
 exit_program = False
@@ -172,12 +172,14 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
                     "PaymentType": "Online",
                     "PaymentMethod": "Online",
                     "Amount": amount,
-                    "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M")
+                    "PaymentTime": datetime.now().strftime("%Y-%m-%d %H:%M:00")
                 }
             ]
         }
 
+        print("??"*5)
         print(prepared_data)
+        print("??"*5)
 
         response = requests.post(
             local_api_url, json=prepared_data, headers=headers)
@@ -185,6 +187,7 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
         if response.status_code != 200:
             print(f"Masa Kapatılamadı: {response.status_code}")
     except:
+        print("ERR----> Prepared Data")
         pass
 
 
@@ -237,14 +240,15 @@ def send_orders_to_local_api(orders):
 
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
+            "Price": order.get("service_total_amount", 0),
             "TableNumber": order.get("first_name", "") + order.get("last_name", ""),
             "Address": "",
             "CustomerName": order.get("first_name", "") + " " + order.get("last_name", ""),
             "OrderNo": "",
-            "CreatedByUserName": "Siparisim+",
+            "CreatedByUserName": "SIPARISIM",
             "Discount": 0,
             "PaymentDetail": "",
-            "UserName": "Siparisim+",
+            "UserName": "SIPARISIM",
                         "Bill": product_items,
                         "ComputerName": "",
                         "service_id": order.get("service_id"),
@@ -388,7 +392,7 @@ def main():
         # process_orders(unprocessed_orders)
 
         last_service_id = get_last_service_id()
-        print("V4 - ###########----------->", last_service_id, "------")
+        print("V5 - ###########----------->", last_service_id, "------")
         orders = fetch_orders(last_service_id)
 
         if orders:
