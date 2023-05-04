@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import pystray
 from PIL import Image
 import threading
-from datetime import date, datetime
+from datetime import datetime
 
 load_dotenv()
 exit_program = False
@@ -155,7 +155,7 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
             "Discount": 0,
             "Debit": 0,
             "CustomerName": customer_name,
-            "PaymentTime": date.today().strftime("%Y-%m-%d %H:%M"),
+            "PaymentTime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "ReceivedByUserName": "SIPARISIM",
             "HeaderId": bill_id,
             "DiscountReason": "",
