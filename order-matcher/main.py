@@ -272,10 +272,21 @@ def send_orders_to_local_api(orders):
             # save_orders(od, _data.get("BillHeaderId", 0))
             close_local_order(_data.get("BillHeaderId", 0), od.get(
                 "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+            complete_sync(od.get("service_id"))
 
     # except Exception as err:
     #     print(err)
     #     pass
+
+
+def complete_sync(service_id):
+    """
+    ilgili servis için senkronizasyonu tamamlandı olarak işaretler
+    """
+    headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
+    api_endpoint = f"{REMOTE_API_URL}/publicapi/sync-complete/{service_id}"
+    response = requests.get(api_endpoint, headers=headers)
+    return response.status_code == 200
 
 
 def fetch_orders(last_service_id):
@@ -392,7 +403,7 @@ def main():
         # process_orders(unprocessed_orders)
 
         last_service_id = get_last_service_id()
-        print("V5 - ###########----------->", last_service_id, "------")
+        print("V6 - ###########----------->", last_service_id, "------")
         orders = fetch_orders(last_service_id)
 
         if orders:
