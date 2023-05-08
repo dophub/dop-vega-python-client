@@ -284,7 +284,7 @@ def complete_sync(service_id):
     ilgili servis için senkronizasyonu tamamlandı olarak işaretler
     """
     headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
-    api_endpoint = f"{REMOTE_API_URL}/publicapi/sync-complete/{service_id}"
+    api_endpoint = f"{REMOTE_API_URL}/publicapi/product/sync-complete/{service_id}"
     print(f"--> api_endpoint: {api_endpoint}")
     response = requests.get(api_endpoint, headers=headers)
     print(f"--> response: {response.status_code}")
@@ -404,15 +404,15 @@ def main():
         # unprocessed_orders = fetch_unprocessed_orders()
         # process_orders(unprocessed_orders)
 
-        last_service_id = get_last_service_id()
-        print("V6 - ###########----------->", last_service_id, "------")
-        orders = fetch_orders(last_service_id)
+        # last_service_id = get_last_service_id()
+        print("V7 - ###########----------->")
+        orders = fetch_orders(0)
 
         if orders:
             local_login()
             send_orders_to_local_api(orders)
-            max_service_id = max(order["service_id"] for order in orders)
-            update_last_service_id(max_service_id)
+            # max_service_id = max(order["service_id"] for order in orders)
+            # update_last_service_id(max_service_id)
 
         # print_orders()
         time.sleep(10)
