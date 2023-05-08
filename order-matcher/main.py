@@ -285,7 +285,9 @@ def complete_sync(service_id):
     """
     headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
     api_endpoint = f"{REMOTE_API_URL}/publicapi/sync-complete/{service_id}"
+    print(f"--> api_endpoint: {api_endpoint}")
     response = requests.get(api_endpoint, headers=headers)
+    print(f"--> response: {response.status_code}")
     return response.status_code == 200
 
 
