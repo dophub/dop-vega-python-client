@@ -270,8 +270,9 @@ def send_orders_to_local_api(orders):
         else:
             _data = response.json()
             # save_orders(od, _data.get("BillHeaderId", 0))
-            close_local_order(_data.get("BillHeaderId", 0), od.get(
-                "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
+            # Siparişi kapatma
+            # close_local_order(_data.get("BillHeaderId", 0), od.get(
+                # "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
             complete_sync(od.get("service_id"))
 
     # except Exception as err:
@@ -405,7 +406,7 @@ def main():
         # process_orders(unprocessed_orders)
 
         # last_service_id = get_last_service_id()
-        print("V7 - ###########----------->")
+        print("V8 - ###########----------->")
         orders = fetch_orders(0)
 
         if orders:
