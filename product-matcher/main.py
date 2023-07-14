@@ -156,7 +156,8 @@ def prepare_product(product):
         options.append({"group_name": "Seçenek2",
                        "id": "SC2", "options": option2})
 
-    return {"id": product.get("Id"), "name": product.get("ProductName"), "category": product.get("ProductGroup"), "code": product.get("ProductCode", ""), "price": productPrice, "vat": product.get("VatRate", 8),
+    return {"id": product.get("Id"), "name": product.get("ProductName"), "category": product.get("ProductGroup"), "code": product.get("ProductCode", ""), "price": productPrice, 
+            "vat": product.get("VatRate", 8),
             "options": options}
 
 
