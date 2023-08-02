@@ -271,7 +271,7 @@ def send_orders_to_local_api(orders):
         for od in order_data:
             print(od)
             response = requests.post(local_api_url, json=od, headers=headers)
-            print(f"---> Order Data Response: {response.status_code}")
+            print(f"[LOCAL]---> Local Order Data Response: {response.status_code}")
             if response.status_code != 200:
                 print(f"Error sending API: {response.status_code}")
             else:
