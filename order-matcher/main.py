@@ -237,7 +237,7 @@ def send_orders_to_local_api(orders):
                 "Options": code2,
                 "Price": item_price,
                 "Quantity": count,
-                "Comment": "",
+                "Comment": item.get("item_note", ""),
                 "OrginalPrice": 0,
             }
             product_items.append(items_model)
