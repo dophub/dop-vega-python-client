@@ -31,8 +31,9 @@ def remote_login():
     print(login_endpoint)
     print({"apikey": api_key, "secretkey": secret_key})
 
-    response = requests.post(login_endpoint, json={
-                             "apikey": api_key, "secretkey": secret_key})
+    response = requests.post(
+        login_endpoint, json={"apikey": api_key, "secretkey": secret_key}
+    )
 
     if response.status_code in (200, 201):
         GLOBAL_REMOTE_TOKEN = response.json()["access_token"]
@@ -51,8 +52,9 @@ def local_login():
     print(f"user: {username}")
 
     try:
-        response = requests.post(login_endpoint, json={
-                                 "username": username, "password": password})
+        response = requests.post(
+            login_endpoint, json={"username": username, "password": password}
+        )
         print(response.status_code)
 
         if response.status_code == 200:
@@ -67,10 +69,10 @@ def create_tables():
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
 
+    cursor.execute("CREATE TABLE IF NOT EXISTS last_value (last_service_id INTEGER)")
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS last_value (last_service_id INTEGER)")
-    cursor.execute(
-        "CREATE TABLE IF NOT EXISTS orders (service_id INTEGER, bill_id INTEGER, order_status INTEGER)")
+        "CREATE TABLE IF NOT EXISTS orders (service_id INTEGER, bill_id INTEGER, order_status INTEGER)"
+    )
 
     conn.commit()
     conn.close()
@@ -121,8 +123,7 @@ def update_last_service_id(new_last_service_id):
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
 
-    cursor.execute("UPDATE last_value SET last_service_id = ?",
-                   (new_last_service_id,))
+    cursor.execute("UPDATE last_value SET last_service_id = ?", (new_last_service_id,))
     conn.commit()
     conn.close()
 
@@ -131,9 +132,14 @@ def save_orders(order, bill_id):
     conn = sqlite3.connect("orders.db")
     cursor = conn.cursor()
 
-    print('---', order, '*'*22)
-    cursor.execute("INSERT INTO orders (service_id, bill_id, order_status) VALUES (?, ?,0)",
-                   (order["service_id"], bill_id,))
+    print("---", order, "*" * 22)
+    cursor.execute(
+        "INSERT INTO orders (service_id, bill_id, order_status) VALUES (?, ?,0)",
+        (
+            order["service_id"],
+            bill_id,
+        ),
+    )
 
     conn.commit()
     conn.close()
@@ -172,17 +178,16 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
                     "PaymentType": "Online",
                     "PaymentMethod": "Online",
                     "Amount": amount,
-                    "PaymentTime": datetime.now().strftime("%Y-%m-%d %H:%M:00")
+                    "PaymentTime": datetime.now().strftime("%Y-%m-%d %H:%M:00"),
                 }
-            ]
+            ],
         }
 
-        print("??"*5)
+        print("??" * 5)
         print(prepared_data)
-        print("??"*5)
+        print("??" * 5)
 
-        response = requests.post(
-            local_api_url, json=prepared_data, headers=headers)
+        response = requests.post(local_api_url, json=prepared_data, headers=headers)
         print(f"---> Order Data Response: {response.status_code}")
         if response.status_code != 200:
             print(f"Masa Kapatılamadı: {response.status_code}")
@@ -193,7 +198,7 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
 
 def send_orders_to_local_api(orders):
     # try:
-    print(len(orders), "---------")
+    # print(len(orders), "---------")
     headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
     local_api_url = f"{API_URL}/sefim/forex/create-order-table"
 
@@ -215,12 +220,11 @@ def send_orders_to_local_api(orders):
             if local_options is not None and len(local_options) > 0:
                 for lo in local_options:
                     integration_additional_data = lo.get(
-                        "integration_additional_data", {})
+                        "integration_additional_data", {}
+                    )
                     if lo.get("group_code") == "SC1":
-                        choice1Id = integration_additional_data.get(
-                            "choice1id", -1)
-                        choice2Id = integration_additional_data.get(
-                            "choice2id", -1)
+                        choice1Id = integration_additional_data.get("choice1id", -1)
+                        choice2Id = integration_additional_data.get("choice2id", -1)
                         code = integration_additional_data.get("code", "")
                     elif lo.get("group_code", "") == "SC2":
                         code2 = integration_additional_data.get("code", "")
@@ -234,46 +238,57 @@ def send_orders_to_local_api(orders):
                 "Price": item_price,
                 "Quantity": count,
                 "Comment": "",
-                "OrginalPrice": 0
+                "OrginalPrice": 0,
             }
             product_items.append(items_model)
 
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
             "Price": order.get("service_total_amount", 0),
-            "TableNumber": order.get("first_name", "") + order.get("last_name", ""),
+            "TableNumber": order.get("special_table_name", "-"),
             "Address": "",
-            "CustomerName": order.get("first_name", "") + " " + order.get("last_name", ""),
-            "OrderNo": "",
+            "CustomerName": order.get("first_name", "")
+            + " "
+            + order.get("lastname", ""),
+            "OrderNo": str(order.get("service_id", "")),
             "CreatedByUserName": "TIMEFOOD",
             "Discount": 0,
             "PaymentDetail": "",
             "UserName": "TIMEFOOD",
-                        "Bill": product_items,
-                        "ComputerName": "",
-                        "service_id": order.get("service_id"),
-                        "CustomerNote": order.get("orders")[0].get("order_note", "")
+            "Bill": product_items,
+            "ComputerName": "",
+            "service_id": order.get("service_id"),
+            "CustomerNote": order.get("service_notes", ""),
         }
         order_data.append(prepared_data)
 
-    print("-"*55)
-    print(order_data)
-    print("-"*55)
-    print(local_api_url)
+    # print("-" * 55)
+    # print(order_data)
+    # print("-" * 55)
+    # print(local_api_url)
 
-    for od in order_data:
-        print(od)
-        response = requests.post(local_api_url, json=od, headers=headers)
-        print(f"---> Order Data Response: {response.status_code}")
-        if response.status_code != 200:
-            print(f"Error sending API: {response.status_code}")
-        else:
-            _data = response.json()
-            # save_orders(od, _data.get("BillHeaderId", 0))
-            # Siparişi kapatma
-            close_local_order(_data.get("BillHeaderId", 0), od.get(
-                "Price", 0), od.get("TableNumber"), od.get("CustomerName"))
-            complete_sync(od.get("service_id"))
+    try:
+        for od in order_data:
+            print(od)
+            response = requests.post(local_api_url, json=od, headers=headers)
+            print(f"---> Order Data Response: {response.status_code}")
+            if response.status_code != 200:
+                print(f"Error sending API: {response.status_code}")
+            else:
+                _data = response.json()
+                # save_orders(od, _data.get("BillHeaderId", 0))
+                # Siparişi kapatma
+                close_local_order(
+                    _data.get("BillHeaderId", 0),
+                    od.get("Price", 0),
+                    od.get("TableNumber"),
+                    od.get("CustomerName"),
+                )
+                complete_sync(od.get("service_id"))
+    except Exception as e:
+        print("!" * 10)
+        print("- VEGA aktarımı yapılamadı")
+        print(e)
 
     # except Exception as err:
     #     print(err)
@@ -296,18 +311,24 @@ def fetch_orders(last_service_id):
     """
     Sipairşim API dan orderlar çekilir.
     """
-    print(f"---{GLOBAL_REMOTE_TOKEN}")
-    headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
-    data = {"last_service_id": last_service_id}
-    api_endpoint = f"{REMOTE_API_URL}/publicapi/product/table-orders"
-    print(f"--> api_endpoint: {api_endpoint}")
-    response = requests.post(api_endpoint, json=data, headers=headers)
-
-    if response.status_code == 200:
-        data = response.json()
-        return data.get("data", [])
-    else:
-        print(f"Error fetching orders: {response.status_code}")
+    try:
+        # print(f"---{GLOBAL_REMOTE_TOKEN}")
+        headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
+        data = {"last_service_id": last_service_id}
+        api_endpoint = f"{REMOTE_API_URL}/publicapi/product/table-orders"
+        # print(f"--> api_endpoint: {api_endpoint}")
+        response = requests.post(api_endpoint, json=data, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("data", [])
+        else:
+            print(f"Error fetching orders: {response.status_code}")
+            return None
+    except Exception as err:
+        print(
+            f" REQUEST EXCEPTION: Uzak sunucuya bağlantı sağlanamadı. Tekrar denenecek"
+        )
+        print(err)
         return None
 
 
@@ -320,8 +341,7 @@ def print_orders():
 
     print("Local orders table contents:")
     for order in orders:
-        print(
-            f"service_id: {order[0]},bill_id: {order[1]} ,order_status: {order[2]}")
+        print(f"service_id: {order[0]},bill_id: {order[1]} ,order_status: {order[2]}")
 
     conn.close()
 
@@ -331,7 +351,9 @@ def update_order_status(service_id, order_status):
     cursor = conn.cursor()
 
     cursor.execute(
-        "UPDATE orders SET order_status = ? WHERE service_id = ?", (order_status, service_id))
+        "UPDATE orders SET order_status = ? WHERE service_id = ?",
+        (order_status, service_id),
+    )
     conn.commit()
 
     conn.close()
@@ -350,7 +372,6 @@ def fetch_unprocessed_orders():
 
 
 def process_orders(orders):
-
     global API_URL
     global REMOTE_API_URL
     global GLOBAL_TOKEN
@@ -365,34 +386,34 @@ def process_orders(orders):
         print(f"Giden Bill Id: {bill_id}")
 
         get_order_url = f"{API_URL}/sefim/forex/get-Order"
-        response = requests.get(get_order_url, headers=headers, json={
-                                "billHeaderId": bill_id})
+        response = requests.get(
+            get_order_url, headers=headers, json={"billHeaderId": bill_id}
+        )
 
         if response.status_code == 200:
-            print(response.json(), '**'*23)
+            print(response.json(), "**" * 23)
             data = response.json()
             data = data.get("data")[0]
             if data["BillState"] == 1:
-                accept_order_url = f"{REMOTE_API_URL}/publicapi/product/accept-table/{service_id}"
-                response = requests.get(
-                    accept_order_url, headers=remote_headers)
-                print(
-                    f"Remote APi Response: {response.status_code} {REMOTE_API_URL}")
+                accept_order_url = (
+                    f"{REMOTE_API_URL}/publicapi/product/accept-table/{service_id}"
+                )
+                response = requests.get(accept_order_url, headers=remote_headers)
+                print(f"Remote APi Response: {response.status_code} {REMOTE_API_URL}")
                 if response.status_code != 200:
-                    print(
-                        f"Error accepting order {bill_id}: {response.status_code}")
+                    print(f"Error accepting order {bill_id}: {response.status_code}")
                 else:
                     update_order_status(service_id, 1)
         else:
             print(
-                f"Error fetching order {bill_id} from local API: {response.status_code}")
+                f"Error fetching order {bill_id} from local API: {response.status_code}"
+            )
 
 
 mutex_name = "dop_vega_order_matcher"
 
 
 def main():
-
     remote_login()
     create_tables()
 
@@ -401,12 +422,11 @@ def main():
     global exit_program
 
     while not exit_program:
-
         # unprocessed_orders = fetch_unprocessed_orders()
         # process_orders(unprocessed_orders)
 
         # last_service_id = get_last_service_id()
-        print("V8 - ###########----------->")
+        print("V9 - ###########----------->")
         orders = fetch_orders(0)
 
         if orders:
@@ -435,7 +455,7 @@ def create_icon(main_func):
 
     menu = (
         pystray.MenuItem("Uygulama", on_activate),
-        pystray.MenuItem("Çıkış", exit_action)
+        pystray.MenuItem("Çıkış", exit_action),
     )
 
     icon = pystray.Icon("name", image, "Siparişim", menu)
@@ -445,8 +465,11 @@ def create_icon(main_func):
         main_func()
         # icon.stop()
 
-    icon.run(setup=lambda icon: threading.Thread(
-        target=start_main_func, args=(icon, main_func)).start())
+    icon.run(
+        setup=lambda icon: threading.Thread(
+            target=start_main_func, args=(icon, main_func)
+        ).start()
+    )
 
 
 if __name__ == "__main__":
