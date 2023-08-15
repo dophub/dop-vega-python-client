@@ -36,6 +36,9 @@ def remote_login():
 
 
 def login():
+    """
+    Vega Login
+    """
     global global_token
 
     login_endpoint = f"{API_URL}/sefim/auth/login"
@@ -198,20 +201,27 @@ def getPrice(optionVal):
 
 
 def post_product_to_remote(token, product):
-    headers = {"Authorization": f"Bearer {token}"}
-    response = requests.post(
-        f"{REMOTE_API_URL}/publicapi/product", json=product, headers=headers
-    )
-    print(product["name"], ":", response.status_code)
+    try:
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.post(
+            f"{REMOTE_API_URL}/publicapi/product/match-product",
+            json=product,
+            headers=headers,
+        )
+        print(product["name"], ":", response.status_code)
 
-    if response.status_code != 200:
-        print(f"Ürün gönderimi başarısız oldu: {product['name']}")
+        if response.status_code != 200:
+            print(f"Ürün gönderimi başarısız oldu: {product['name']}")
+    except Exception as Err:
+        print(Err)
+        print("*** INTERNET BAĞLANTISI YOK ****")
 
 
 def post_product_deactivate_to_remote(token, product_id: str):
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.get(
-        f"{REMOTE_API_URL}/publicapi/product/deactivate/{product_id}", headers=headers
+        f"{REMOTE_API_URL}/publicapi/product/deactivate-match/{product_id}",
+        headers=headers,
     )
     print(f"Deactivating : {product_id}", response.status_code)
 
@@ -229,19 +239,13 @@ def main():
     global global_remote_token
     remote_login()
     login()
-    print("***" * 50)
-    print(f"Global Token: {global_remote_token}")
-    print("*" * 20, "-ÜRÜNLER VEGADAN ÇEKİLİYOR-", "*" * 20)
+    print("||" * 50)
 
     products = get_product_list()
     total_products: int = len(products)
-    # products = read_demo_file()
     print(f"Toplam Ürün Sayısı:{total_products} adet ürün bulundu...")
-
-    # temp_json = ""
     count = 0
-
-    print("*" * 20, "ÜRÜNLER ÇEKİLDİ - SUNUCUYA AKTARILIYOR", "*" * 20)
+    print("#" * 20, "ÜRÜNLER ÇEKİLDİ - EŞLEŞTİRME için AKTARILIYOR", "*" * 20)
 
     for product in products:
         count += 1
