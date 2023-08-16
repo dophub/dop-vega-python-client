@@ -238,7 +238,7 @@ def main():
     global global_remote_token
     remote_login()
     login()
-    print("||" * 50)
+    print("V1 - ||" * 50)
 
     products = get_product_list()
     total_products: int = len(products)
