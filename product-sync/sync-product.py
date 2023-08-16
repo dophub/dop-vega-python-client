@@ -208,10 +208,9 @@ def post_product_to_remote(token, product):
             json=product,
             headers=headers,
         )
-        print(product["name"], ":", response.status_code)
-
+        print(product["name"], ":", response.status_code, response.content)
         if response.status_code != 200:
-            print(f"Ürün gönderimi başarısız oldu: {product['name']}")
+            print(f"!!! Ürün gönderimi başarısız oldu: {product['name']}")
     except Exception as Err:
         print(Err)
         print("*** INTERNET BAĞLANTISI YOK ****")
@@ -223,7 +222,7 @@ def post_product_deactivate_to_remote(token, product_id: str):
         f"{REMOTE_API_URL}/publicapi/product/deactivate-match/{product_id}",
         headers=headers,
     )
-    print(f"Deactivating : {product_id}", response.status_code)
+    # print(f"Deactivating : {product_id}", response.status_code)
 
     if response.status_code != 200:
         print(f"Ürün deactivate başarısız oldu: {product_id}")
@@ -255,7 +254,7 @@ def main():
             prepared_product["add_in_menu"] = False
             # temp_json += "," + json.dumps(prepared_product)
             post_product_to_remote(global_remote_token, prepared_product)
-            print(f"{count}/{total_products}")
+            # print(f"{count}/{total_products}")
         else:
             # print(f"Ürün grubu $ ile başlıyor. Ürün pasif yapılıyor: {product.get('ProductName')}")
             product_id: int = product.get("Id")
