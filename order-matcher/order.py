@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import pystray
 from PIL import Image
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 
 load_dotenv()
 exit_program = False
@@ -18,8 +18,29 @@ REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
 api_key = os.getenv("REMOTE_API_KEY")
 secret_key = os.getenv("REMOTE_API_SECRET")
 
+
 GLOBAL_REMOTE_TOKEN = ""
 GLOBAL_TOKEN = ""
+
+class LocalLogger:
+    def __init__(self, log_dir="logs"):
+        self.log_dir = log_dir
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
+        self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
+        self.cleanup_previous_day_log()
+
+    def cleanup_previous_day_log(self):
+        """Bir önceki günün log dosyasını siler."""
+        yesterday = datetime.now().date() - timedelta(days=1)
+        yesterday_log_file = os.path.join(self.log_dir, f"{yesterday}.log")
+        if os.path.exists(yesterday_log_file):
+            os.remove(yesterday_log_file)
+
+    def log(self, message):
+        """Mesajı günün log dosyasına ekler."""
+        with open(self.today_log_file, "a") as log_file:
+            log_file.write(f"{datetime.now()} --> {message}\n")
 
 
 def remote_login():
@@ -272,6 +293,7 @@ def send_orders_to_local_api(orders):
             print(od)
             response = requests.post(local_api_url, json=od, headers=headers)
             print(f"[LOCAL]---> Local Order Data Response: {response.status_code}")
+            logger.log(f"[PAST LOCAL] --> {od.get('OrderNo','')} - Local Response: {response.status_code}")
             if response.status_code != 200:
                 print(f"Error sending API: {response.status_code}")
             else:
@@ -301,9 +323,10 @@ def complete_sync(service_id):
     """
     headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
     api_endpoint = f"{REMOTE_API_URL}/publicapi/product/sync-complete/{service_id}"
-    print(f"--> api_endpoint: {api_endpoint}")
+    # print(f"--> api_endpoint: {api_endpoint}")
     response = requests.get(api_endpoint, headers=headers)
-    print(f"--> response: {response.status_code}")
+    # print(f"--> response: {response.status_code}")
+    logger.log(f"[COMPLETE REMOTE] --> {service_id} - Local Response: {response.status_code}")
     return response.status_code == 200
 
 
@@ -426,10 +449,11 @@ def main():
         # process_orders(unprocessed_orders)
 
         # last_service_id = get_last_service_id()
-        print("V9 - ###########----------->")
+        print("V10 - ###########----------->")
         orders = fetch_orders(0)
 
         if orders:
+            logger.log(f"Vega'dan {len(orders)} adet sipariş alındı.")
             local_login()
             send_orders_to_local_api(orders)
             # max_service_id = max(order["service_id"] for order in orders)
@@ -471,5 +495,6 @@ def create_icon(main_func):
     )
 
 
+logger = LocalLogger()
 if __name__ == "__main__":
     create_icon(main)
