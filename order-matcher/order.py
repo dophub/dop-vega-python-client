@@ -250,8 +250,10 @@ def send_orders_to_local_api(orders):
                     elif lo.get("group_code", "") == "SC2":
                         code2 = integration_additional_data.get("code", "")
 
+            _local_product_name:str =f"{local_product_name}.{code}"
+            _local_product_name = _local_product_name.rstrip(".")
             items_model = {
-                "ProductName": f"{local_product_name}.{code}",
+                "ProductName": _local_product_name,
                 "ProductId": int(local_product_code),
                 "Choice1Id": choice1Id if choice1Id > 0 else -1,
                 "Choice2Id": choice2Id if choice2Id > 0 else -1,
@@ -293,7 +295,7 @@ def send_orders_to_local_api(orders):
             print(od)
             response = requests.post(local_api_url, json=od, headers=headers)
             print(f"[LOCAL]---> Local Order Data Response: {response.status_code}")
-            logger.log(f"[PAST LOCAL] --> {od.get('OrderNo','')} - Local Response: {response.status_code}")
+            logger.log(f"[PAST LOCAL] --> {od.get('OrderNo','')} - {od.get('TableNumber','')} - Local Response: {response.status_code}")
             if response.status_code != 200:
                 print(f"Error sending API: {response.status_code}")
             else:
@@ -453,7 +455,7 @@ def main():
         orders = fetch_orders(0)
 
         if orders:
-            logger.log(f"Vega'dan {len(orders)} adet sipariş alındı.")
+            logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
             local_login()
             send_orders_to_local_api(orders)
             # max_service_id = max(order["service_id"] for order in orders)
@@ -471,6 +473,8 @@ def exit_action(icon, item):
     icon.stop()
     global exit_program
     exit_program = True
+    logger.log('Program Kapatıldı')
+
 
 
 def create_icon(main_func):
@@ -497,4 +501,5 @@ def create_icon(main_func):
 
 logger = LocalLogger()
 if __name__ == "__main__":
+    logger.log('Program Başlatıldı')
     create_icon(main)
