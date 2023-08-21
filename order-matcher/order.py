@@ -470,10 +470,10 @@ def on_activate(icon, item):
 
 
 def exit_action(icon, item):
+    logger.log('Program Kapatıldı')
     icon.stop()
     global exit_program
     exit_program = True
-    logger.log('Program Kapatıldı')
 
 
 
