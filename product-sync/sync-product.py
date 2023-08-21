@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 load_dotenv()
 
@@ -13,6 +14,27 @@ global_remote_token = ""
 api_key = os.getenv("REMOTE_API_KEY")
 secret_key = os.getenv("REMOTE_API_SECRET")
 REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
+
+class LocalLogger:
+    def __init__(self, log_dir="logs"):
+        self.log_dir = log_dir
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
+        self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
+        self.cleanup_previous_day_log()
+
+    def cleanup_previous_day_log(self):
+        """Bir önceki günün log dosyasını siler."""
+        yesterday = datetime.now().date() - timedelta(days=1)
+        yesterday_log_file = os.path.join(self.log_dir, f"{yesterday}.log")
+        if os.path.exists(yesterday_log_file):
+            os.remove(yesterday_log_file)
+
+    def log(self, message):
+        """Mesajı günün log dosyasına ekler."""
+        with open(self.today_log_file, "a") as log_file:
+            log_file.write(f"{datetime.now()} --> {message}\n")
+
 
 
 def remote_login():
@@ -223,8 +245,10 @@ def post_product_deactivate_to_remote(token, product_id: str):
         headers=headers,
     )
     # print(f"Deactivating : {product_id}", response.status_code)
+    logger.log(f"{product_id} : {response.status_code}")
 
     if response.status_code != 200:
+        logger.log(f"Ürün gönderimi başarısız oldu: {product_id}")
         print(f"Ürün deactivate başarısız oldu: {product_id}")
 
 
@@ -238,11 +262,12 @@ def main():
     global global_remote_token
     remote_login()
     login()
-    print("V1 - ||" * 50)
+    print("V2 -----")
 
     products = get_product_list()
     total_products: int = len(products)
     print(f"Toplam Ürün Sayısı:{total_products} adet ürün bulundu...")
+    logger.log(f"Toplam Ürün Sayısı:{total_products}...")
     count = 0
     print("#" * 20, "ÜRÜNLER ÇEKİLDİ - EŞLEŞTİRME için AKTARILIYOR", "*" * 20)
 
@@ -261,10 +286,13 @@ def main():
             post_product_deactivate_to_remote(global_remote_token, str(product_id))
 
     print(f"-->Toplam Aktarılan: {count}")
+    logger.log(f"-->Toplam Aktarılan: {count}")
 
     # f = open("temp.json","w")
     # f.write("[" + temp_json[1:] + "]")
 
 
+logger = LocalLogger()
 if __name__ == "__main__":
+    logger.log('Program Başladı')
     main()

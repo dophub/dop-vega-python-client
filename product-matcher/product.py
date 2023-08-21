@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 load_dotenv()
 
@@ -13,6 +14,27 @@ global_remote_token = ""
 api_key = os.getenv("REMOTE_API_KEY")
 secret_key = os.getenv("REMOTE_API_SECRET")
 REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
+
+class LocalLogger:
+    def __init__(self, log_dir="logs"):
+        self.log_dir = log_dir
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
+        self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
+        self.cleanup_previous_day_log()
+
+    def cleanup_previous_day_log(self):
+        """Bir önceki günün log dosyasını siler."""
+        yesterday = datetime.now().date() - timedelta(days=1)
+        yesterday_log_file = os.path.join(self.log_dir, f"{yesterday}.log")
+        if os.path.exists(yesterday_log_file):
+            os.remove(yesterday_log_file)
+
+    def log(self, message):
+        """Mesajı günün log dosyasına ekler."""
+        with open(self.today_log_file, "a") as log_file:
+            log_file.write(f"{datetime.now()} --> {message}\n")
+
 
 
 def remote_login():
@@ -203,9 +225,11 @@ def post_product_to_remote(token, product):
         f"{REMOTE_API_URL}/publicapi/product", json=product, headers=headers
     )
     print(product["name"], ":", response.status_code)
+    logger.log(f"{product['name']} : {response.status_code}")
 
     if response.status_code != 200:
         print(f"Ürün gönderimi başarısız oldu: {product['name']}")
+        logger.log(f"Ürün gönderimi başarısız oldu: {product['name']}")
 
 
 def post_product_deactivate_to_remote(token, product_id: str):
@@ -236,7 +260,7 @@ def main():
     products = get_product_list()
     total_products: int = len(products)
     # products = read_demo_file()
-    print(f"Toplam Ürün Sayısı:{total_products} adet ürün bulundu...")
+    logger.log(f"Toplam Ürün Sayısı:{total_products} adet ürün vegadan alındı...")
 
     # temp_json = ""
     count = 0
@@ -263,5 +287,7 @@ def main():
     # f.write("[" + temp_json[1:] + "]")
 
 
+logger = LocalLogger()
 if __name__ == "__main__":
+    logger.log('Ürün senkronizasyonu başladı')
     main()

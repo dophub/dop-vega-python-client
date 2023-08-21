@@ -48,18 +48,17 @@ def remote_login():
     global api_key
     global secret_key
 
-    login_endpoint = f"{REMOTE_API_URL}/publicapi/auth/login"
-    print(login_endpoint)
-    print({"apikey": api_key, "secretkey": secret_key})
-
-    response = requests.post(
-        login_endpoint, json={"apikey": api_key, "secretkey": secret_key}
-    )
-
-    if response.status_code in (200, 201):
-        GLOBAL_REMOTE_TOKEN = response.json()["access_token"]
-    else:
-        raise Exception("Product API Login işlemi başarısız oldu.")
+    try:
+        login_endpoint = f"{REMOTE_API_URL}/publicapi/auth/login"
+        response = requests.post(
+            login_endpoint, json={"apikey": api_key, "secretkey": secret_key}
+        )
+        if response.status_code in (200, 201):
+            GLOBAL_REMOTE_TOKEN = response.json()["access_token"]
+        else:
+            raise Exception("Product API Login işlemi başarısız oldu.")
+    except:
+        logger.log('[ERROR] REMOTE LOGIN BAŞARISIZ')
 
 
 def local_login():
@@ -68,9 +67,6 @@ def local_login():
     login_endpoint = f"{API_URL}/sefim/auth/login"
     username = os.getenv("APIUSER")
     password = os.getenv("PASSWORD")
-
-    print(f"login endpoint {login_endpoint}")
-    print(f"user: {username}")
 
     try:
         response = requests.post(
@@ -83,7 +79,7 @@ def local_login():
         else:
             raise Exception("Login işlemi başarısız oldu.")
     except:
-        pass
+        logger.log('[ERROR] VEGA LOGIN BAŞARISIZ')
 
 
 def create_tables():
@@ -213,8 +209,7 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
         if response.status_code != 200:
             print(f"Masa Kapatılamadı: {response.status_code}")
     except:
-        print("ERR----> Prepared Data")
-        pass
+        logger.log(f"VEGAYADA SİPARİŞ KAPATILAMADI: {table_name}")
 
 
 def send_orders_to_local_api(orders):
@@ -310,9 +305,7 @@ def send_orders_to_local_api(orders):
                 )
                 complete_sync(od.get("service_id"))
     except Exception as e:
-        print("!" * 10)
-        print("- VEGA aktarımı yapılamadı")
-        print(e)
+        logger.log("- VEGA aktarımı yapılamadı")
 
     # except Exception as err:
     #     print(err)
