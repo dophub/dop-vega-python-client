@@ -454,7 +454,6 @@ def create_icon(main_func):
     image = Image.open("sip.png")
 
     menu = (
-        pystray.MenuItem("Uygulama", on_activate),
         pystray.MenuItem("Çıkış", exit_action),
     )
 
