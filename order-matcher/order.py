@@ -467,6 +467,7 @@ def exit_action(icon, item):
     icon.stop()
     global exit_program
     exit_program = True
+    sys.exit(0)
 
 
 
