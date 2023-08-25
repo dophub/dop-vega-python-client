@@ -15,6 +15,7 @@ api_key = os.getenv("REMOTE_API_KEY")
 secret_key = os.getenv("REMOTE_API_SECRET")
 REMOTE_API_URL = str(os.getenv("REMOTE_API_URL"))
 
+
 class LocalLogger:
     def __init__(self, log_dir="logs"):
         self.log_dir = log_dir
@@ -22,6 +23,11 @@ class LocalLogger:
             os.makedirs(self.log_dir)
         self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
         self.cleanup_previous_day_log()
+
+    def get_log_file(self):
+        self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
+        return self.today_log_file
+
 
     def cleanup_previous_day_log(self):
         """Bir önceki günün log dosyasını siler."""
@@ -31,9 +37,11 @@ class LocalLogger:
             os.remove(yesterday_log_file)
 
     def log(self, message):
-        """Mesajı günün log dosyasına ekler."""
-        with open(self.today_log_file, "a") as log_file:
-            log_file.write(f"{datetime.now()} --> {message}\n")
+        try:
+            with open(self.get_log_file(), "a") as log_file:
+                log_file.write(f"{datetime.now()} --> {message}\n")
+        except:
+            print("Log dosyası oluşturulamadı.")
 
 
 

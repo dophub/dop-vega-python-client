@@ -1,5 +1,4 @@
 import sys
-import ctypes
 import os
 import time
 import requests
@@ -30,6 +29,11 @@ class LocalLogger:
         self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
         self.cleanup_previous_day_log()
 
+    def get_log_file(self):
+        self.today_log_file = os.path.join(self.log_dir, f"{datetime.now().date()}.log")
+        return self.today_log_file
+
+
     def cleanup_previous_day_log(self):
         """Bir önceki günün log dosyasını siler."""
         yesterday = datetime.now().date() - timedelta(days=1)
@@ -38,11 +42,13 @@ class LocalLogger:
             os.remove(yesterday_log_file)
 
     def log(self, message):
-        """Mesajı günün log dosyasına ekler."""
-        with open(self.today_log_file, "a") as log_file:
-            log_file.write(f"{datetime.now()} --> {message}\n")
+        try:
+            with open(self.get_log_file(), "a") as log_file:
+                log_file.write(f"{datetime.now()} --> {message}\n")
+        except:
+            print("Log dosyası oluşturulamadı.")
 
-
+logger = LocalLogger()
 def remote_login():
     global GLOBAL_REMOTE_TOKEN
     global api_key
@@ -305,6 +311,7 @@ def send_orders_to_local_api(orders):
                 )
                 complete_sync(od.get("service_id"))
     except Exception as e:
+        print(e)
         logger.log("- VEGA aktarımı yapılamadı")
 
     # except Exception as err:
@@ -463,7 +470,7 @@ def on_activate(icon, item):
 
 
 def exit_action(icon, item):
-    logger.log('Program Kapatıldı')
+    logger.log('Program Kapatıldı.')
     icon.stop()
     global exit_program
     exit_program = True
@@ -479,7 +486,7 @@ def create_icon(main_func):
         pystray.MenuItem("Çıkış", exit_action),
     )
 
-    icon = pystray.Icon("name", image, "Siparişim", menu)
+    icon = pystray.Icon("name", image, "Siparişim-VEGA", ())
 
     def start_main_func(icon, main_func):
         icon.visible = True
@@ -493,7 +500,6 @@ def create_icon(main_func):
     )
 
 
-logger = LocalLogger()
 if __name__ == "__main__":
     logger.log('Program Başlatıldı')
     create_icon(main)
