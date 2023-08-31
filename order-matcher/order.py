@@ -1,6 +1,5 @@
 
 import sys
-import signal
 import os
 import time
 import requests
@@ -328,18 +327,12 @@ def process_orders(orders):
 
 MUTEX_NAME = "order"
 
-class GracefulKiller:
-  kill_now = False
-  def __init__(self):
-    signal.signal(signal.SIGINT, self.exit_gracefully)
-    signal.signal(signal.SIGTERM, self.exit_gracefully)
-
-  def exit_gracefully(self, *args):
-    self.kill_now = True
-
 def main():
     print("V21 - ###########----------->")
     try:
+        time.sleep(60*1)
+        print("*")
+        raise Exception('Hata')
         remote_login()
 
         # delete_all_orders()
@@ -363,7 +356,7 @@ def main():
             # print_orders()
             time.sleep(10)
     except Exception as err:
-        logger.log(f"GLOBAL [ERROR] --> {err}")
+        logger.log(f"GLOBAL [ERROR] 60 sn sonra tekrar başlayacak --> {err}")
         time.sleep(60)
         main()
 
@@ -402,7 +395,3 @@ def create_icon(main_func):
 if __name__ == "__main__":
     logger.log('Program Başlatıldı')
     create_icon(main)
-    killer = GracefulKiller()
-    while not killer.kill_now:
-        time.sleep(1)
-        logger.log('Program Kapatıldı.')
