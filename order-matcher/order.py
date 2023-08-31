@@ -10,10 +10,9 @@ import threading
 from datetime import datetime, timedelta
 
 
-import win32event
-import win32api
-import winerror
-
+from win32event import CreateMutex
+from win32api import CloseHandle, GetLastError
+from winerror import ERROR_ALREADY_EXISTS
 
 load_dotenv()
 exit_program = False
@@ -333,8 +332,8 @@ def process_orders(orders):
 MUTEX_NAME = "order"
 
 def check_single_instance():
-    mutex = win32event.CreateMutex(None, False, MUTEX_NAME)
-    if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
+    mutex = CreateMutex(None, False, MUTEX_NAME)
+    if GetLastError() == ERROR_ALREADY_EXISTS:
         mutex = None
         print("Uygulama zaten çalışıyor.")
         logger.log('Uygulama zaten çalışıyor.')
