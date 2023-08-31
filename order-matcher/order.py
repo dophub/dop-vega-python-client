@@ -10,10 +10,6 @@ import threading
 from datetime import datetime, timedelta
 
 
-from win32event import CreateMutex
-from win32api import CloseHandle, GetLastError
-from winerror import ERROR_ALREADY_EXISTS
-
 load_dotenv()
 exit_program = False
 API_URL = os.getenv("API_URL")
@@ -330,20 +326,17 @@ def process_orders(orders):
 
 
 MUTEX_NAME = "order"
+import psutil
 
 def check_single_instance():
-    mutex = CreateMutex(None, False, MUTEX_NAME)
-    if GetLastError() == ERROR_ALREADY_EXISTS:
-        CloseHandle(mutex)
-        mutex = None
-        print("Uygulama zaten çalışıyor.")
-        logger.log('Uygulama zaten çalışıyor.')
-        sys.exit()
+    current_process = psutil.Process()
+    current_process_name = current_process.name()
+    for process in psutil.process_iter(['pid', 'name']):
+        if process.name == current_process_name and process.pid != current_process.pid:
+            print("Uygulama zaten çalışıyor.")
+            sys.exit()
 
 def main():
-
-    check_single_instance()
-
     try:
         remote_login()
 
