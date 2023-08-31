@@ -326,13 +326,15 @@ def process_orders(orders):
 
 
 MUTEX_NAME = "order"
-
+VER = 21
 def main():
-    print("V21 - ###########----------->")
+
+    print(f"V{VER} - ###########-----------")
+    logger.log(f"V{VER} - Başladı")
     try:
-        time.sleep(60*1)
-        print("*")
-        raise Exception('Hata')
+        logger.log('60 sn sonra tekrar başlayacak')
+        time.sleep(60)
+
         remote_login()
 
         # delete_all_orders()
@@ -356,7 +358,7 @@ def main():
             # print_orders()
             time.sleep(10)
     except Exception as err:
-        logger.log(f"GLOBAL [ERROR] 60 sn sonra tekrar başlayacak --> {err}")
+        logger.log(f"GLOBAL [ERROR] V{VER} 60 sn sonra tekrar başlayacak --> {err}")
         time.sleep(60)
         main()
 
