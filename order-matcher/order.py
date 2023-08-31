@@ -334,6 +334,7 @@ MUTEX_NAME = "order"
 def check_single_instance():
     mutex = CreateMutex(None, False, MUTEX_NAME)
     if GetLastError() == ERROR_ALREADY_EXISTS:
+        CloseHandle(mutex)
         mutex = None
         print("Uygulama zaten çalışıyor.")
         logger.log('Uygulama zaten çalışıyor.')
