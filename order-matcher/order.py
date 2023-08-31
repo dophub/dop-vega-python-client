@@ -337,6 +337,7 @@ def check_single_instance():
             sys.exit()
 
 def main():
+    check_single_instance()
     try:
         remote_login()
 
