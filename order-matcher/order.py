@@ -1,3 +1,4 @@
+
 import sys
 import os
 import time
@@ -67,7 +68,6 @@ def remote_login():
             raise Exception("Product API Login işlemi başarısız oldu.")
     except:
         logger.log('[ERROR] REMOTE LOGIN BAŞARISIZ')
-        raise Exception('REMOTE LOgin Başarısız')
 
 
 def local_login():
@@ -89,7 +89,86 @@ def local_login():
             raise Exception("Login işlemi başarısız oldu.")
     except:
         logger.log('[ERROR] VEGA LOGIN BAŞARISIZ')
-        raise Exception('VEGA LOgin Başarısız')
+
+
+def create_tables():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("CREATE TABLE IF NOT EXISTS last_value (last_service_id INTEGER)")
+    cursor.execute(
+        "CREATE TABLE IF NOT EXISTS orders (service_id INTEGER, bill_id INTEGER, order_status INTEGER)"
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def delete_all_orders():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM orders")
+    conn.commit()
+
+    print("All records deleted from local orders table.")
+    conn.close()
+
+
+def reset_last_value():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE last_value SET last_service_id = 0")
+    conn.commit()
+
+    print("Local last_value reset to 0.")
+    conn.close()
+
+
+def get_last_service_id():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT last_service_id FROM last_value")
+    last_service_id = cursor.fetchone()
+
+    if last_service_id is None:
+        cursor.execute("INSERT INTO last_value (last_service_id) VALUES (0)")
+        conn.commit()
+        last_service_id = 0
+    else:
+        last_service_id = last_service_id[0]
+
+    conn.close()
+    return last_service_id
+
+
+def update_last_service_id(new_last_service_id):
+    print(f"----- LastService Id: {new_last_service_id}")
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE last_value SET last_service_id = ?", (new_last_service_id,))
+    conn.commit()
+    conn.close()
+
+
+def save_orders(order, bill_id):
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    print("---", order, "*" * 22)
+    cursor.execute(
+        "INSERT INTO orders (service_id, bill_id, order_status) VALUES (?, ?,0)",
+        (
+            order["service_id"],
+            bill_id,
+        ),
+    )
+
+    conn.commit()
+    conn.close()
 
 
 def close_local_order(bill_id: int, amount: float, table_name: str, customer_name: str):
@@ -140,8 +219,6 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
             print(f"Masa Kapatılamadı: {response.status_code}")
     except:
         logger.log(f"VEGAYADA SİPARİŞ KAPATILAMADI: {table_name}")
-        raise Exception('Vegaya Sipariş Yazılamadı')
-
 
 
 def send_orders_to_local_api(orders):
@@ -239,7 +316,6 @@ def send_orders_to_local_api(orders):
     except Exception as e:
         print(e)
         logger.log("- VEGA aktarımı yapılamadı")
-        raise Exception('Vega Aktarımı Yapılamadı')
 
     # except Exception as err:
     #     print(err)
@@ -250,17 +326,13 @@ def complete_sync(service_id):
     """
     ilgili servis için senkronizasyonu tamamlandı olarak işaretler
     """
-    try:
-        headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
-        api_endpoint = f"{REMOTE_API_URL}/publicapi/product/sync-complete/{service_id}"
-        # print(f"--> api_endpoint: {api_endpoint}")
-        response = requests.get(api_endpoint, headers=headers)
-        # print(f"--> response: {response.status_code}")
-        logger.log(f"[COMPLETE REMOTE] --> {service_id} - Local Response: {response.status_code}")
-        return response.status_code == 200
-    except Exception as err:
-        logger.log(f"[ERROR] Senkronizayon tamamlanamadı--> {service_id} - {err}")
-        raise Exception('Senkronizasyon Tamamlanamadı')
+    headers = {"Authorization": f"Bearer {GLOBAL_REMOTE_TOKEN}"}
+    api_endpoint = f"{REMOTE_API_URL}/publicapi/product/sync-complete/{service_id}"
+    # print(f"--> api_endpoint: {api_endpoint}")
+    response = requests.get(api_endpoint, headers=headers)
+    # print(f"--> response: {response.status_code}")
+    logger.log(f"[COMPLETE REMOTE] --> {service_id} - Local Response: {response.status_code}")
+    return response.status_code == 200
 
 
 def fetch_orders(last_service_id):
@@ -286,6 +358,45 @@ def fetch_orders(last_service_id):
         )
         print(err)
         return None
+
+
+def print_orders():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders WHERE order_status = 0")
+    orders = cursor.fetchall()
+
+    print("Local orders table contents:")
+    for order in orders:
+        print(f"service_id: {order[0]},bill_id: {order[1]} ,order_status: {order[2]}")
+
+    conn.close()
+
+
+def update_order_status(service_id, order_status):
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "UPDATE orders SET order_status = ? WHERE service_id = ?",
+        (order_status, service_id),
+    )
+    conn.commit()
+
+    conn.close()
+
+
+def fetch_unprocessed_orders():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders WHERE order_status = 0")
+    unprocessed_orders = cursor.fetchall()
+
+    conn.close()
+
+    return unprocessed_orders
 
 
 def process_orders(orders):
@@ -318,54 +429,43 @@ def process_orders(orders):
                 response = requests.get(accept_order_url, headers=remote_headers)
                 print(f"Remote APi Response: {response.status_code} {REMOTE_API_URL}")
                 if response.status_code != 200:
-                   print(f"Error accepting order {bill_id}: {response.status_code}")
+                    print(f"Error accepting order {bill_id}: {response.status_code}")
+                else:
+                    update_order_status(service_id, 1)
         else:
             print(
                 f"Error fetching order {bill_id} from local API: {response.status_code}"
             )
 
 
-MUTEX_NAME = "order"
-import psutil
+mutex_name = "dop_vega_order_matcher"
 
-def check_single_instance():
-    current_process = psutil.Process()
-    current_process_name = current_process.name()
-    for process in psutil.process_iter(['pid', 'name']):
-        if process.name == current_process_name and process.pid != current_process.pid:
-            print("Uygulama zaten çalışıyor.")
-            sys.exit()
 
 def main():
-    check_single_instance()
-    try:
-        remote_login()
+    remote_login()
+    create_tables()
 
-        # delete_all_orders()
-        # reset_last_value()
-        global exit_program
+    # delete_all_orders()
+    # reset_last_value()
+    global exit_program
 
-        while not exit_program:
-            # unprocessed_orders = fetch_unprocessed_orders()
-            # process_orders(unprocessed_orders)
+    while not exit_program:
+        # unprocessed_orders = fetch_unprocessed_orders()
+        # process_orders(unprocessed_orders)
 
-            # last_service_id = get_last_service_id()
-            print("V11 - ###########----------->")
-            orders = fetch_orders(0)
+        # last_service_id = get_last_service_id()
+        print("V10 - ###########----------->")
+        orders = fetch_orders(0)
 
-            if orders:
-                logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
-                local_login()
-                send_orders_to_local_api(orders)
-                # max_service_id = max(order["service_id"] for order in orders)
-                # update_last_service_id(max_service_id)
+        if orders:
+            logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
+            local_login()
+            send_orders_to_local_api(orders)
+            # max_service_id = max(order["service_id"] for order in orders)
+            # update_last_service_id(max_service_id)
 
-            # print_orders()
-            time.sleep(15)
-    except Exception as err:
-        logger.log(f"GLOBAL [ERROR] --> {err}")
-        time.sleep(60)
-        main()
+        # print_orders()
+        time.sleep(10)
 
 
 def on_activate(icon, item):
