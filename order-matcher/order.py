@@ -223,7 +223,7 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
 
 def send_orders_to_local_api(orders):
     # try:
-    # print(len(orders), "---------")
+    print(len(orders), "---------")
     headers = {"Authorization": f"Bearer {GLOBAL_TOKEN}"}
     local_api_url = f"{API_URL}/sefim/forex/create-order-table"
 
@@ -296,7 +296,7 @@ def send_orders_to_local_api(orders):
 
     try:
         for od in order_data:
-            print(od)
+            print('local api:', local_api_url)
             response = requests.post(local_api_url, json=od, headers=headers)
             print(f"[LOCAL]---> Local Order Data Response: {response.status_code}")
             logger.log(f"[PAST LOCAL] --> {od.get('OrderNo','')} - {od.get('TableNumber','')} - Local Response: {response.status_code}")
@@ -443,7 +443,7 @@ mutex_name = "dop_vega_order_matcher"
 
 def main():
     remote_login()
-    create_tables()
+    # create_tables()
 
     # delete_all_orders()
     # reset_last_value()
@@ -454,7 +454,7 @@ def main():
         # process_orders(unprocessed_orders)
 
         # last_service_id = get_last_service_id()
-        print("V11 - ###########----------->")
+        print("V20 - ###########----------->")
         orders = fetch_orders(0)
 
         if orders:
