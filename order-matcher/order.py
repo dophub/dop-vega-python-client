@@ -1,5 +1,6 @@
 
 import sys
+import signal
 import os
 import time
 import requests
@@ -90,7 +91,7 @@ def local_login():
             raise Exception("Login işlemi başarısız oldu.")
     except:
         logger.log('[ERROR] VEGA LOGIN BAŞARISIZ')
-        raise Exception('VEGA LOgin Başarısız')
+        raise Exception('VEGA Login Başarısız')
 
 
 def close_local_order(bill_id: int, amount: float, table_name: str, customer_name: str):
@@ -238,7 +239,6 @@ def send_orders_to_local_api(orders):
                 )
                 complete_sync(od.get("service_id"))
     except Exception as e:
-        print(e)
         logger.log("- VEGA aktarımı yapılamadı")
         raise Exception('Vega Aktarımı Yapılamadı')
 
@@ -328,7 +328,17 @@ def process_orders(orders):
 
 MUTEX_NAME = "order"
 
+class GracefulKiller:
+  kill_now = False
+  def __init__(self):
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+  def exit_gracefully(self, *args):
+    self.kill_now = True
+
 def main():
+    print("V21 - ###########----------->")
     try:
         remote_login()
 
@@ -341,18 +351,17 @@ def main():
             # process_orders(unprocessed_orders)
 
             # last_service_id = get_last_service_id()
-            print("V21 - ###########----------->")
             orders = fetch_orders(0)
 
             if orders:
                 logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
                 local_login()
                 send_orders_to_local_api(orders)
+                logger.log("\n")
                 # max_service_id = max(order["service_id"] for order in orders)
                 # update_last_service_id(max_service_id)
-
             # print_orders()
-            time.sleep(15)
+            time.sleep(10)
     except Exception as err:
         logger.log(f"GLOBAL [ERROR] --> {err}")
         time.sleep(60)
@@ -375,18 +384,14 @@ def exit_action(icon, item):
 def create_icon(main_func):
     # İkon görüntüsü
     image = Image.open("sip.png")
-
     menu = (
         pystray.MenuItem("Çıkış", exit_action),
     )
-
     icon = pystray.Icon("name", image, "Siparişim-VEGA", ())
-
     def start_main_func(icon, main_func):
         icon.visible = True
         main_func()
         # icon.stop()
-
     icon.run(
         setup=lambda icon: threading.Thread(
             target=start_main_func, args=(icon, main_func)
@@ -397,3 +402,7 @@ def create_icon(main_func):
 if __name__ == "__main__":
     logger.log('Program Başlatıldı')
     create_icon(main)
+    killer = GracefulKiller()
+    while not killer.kill_now:
+        time.sleep(1)
+        logger.log('Program Kapatıldı.')
