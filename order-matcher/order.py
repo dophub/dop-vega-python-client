@@ -53,6 +53,7 @@ class LocalLogger:
 
 logger = LocalLogger()
 def remote_login():
+    raise Exception('Remote Login Başarısız')
     global GLOBAL_REMOTE_TOKEN
     global api_key
     global secret_key
@@ -332,7 +333,7 @@ def main():
     print(f"V{VER} - ###########-----------")
     logger.log(f"V{VER} - Başladı")
     try:
-        logger.log('60 sn sonra tekrar başlayacak')
+        logger.log('60 sn sonra devam edecek')
         time.sleep(60)
 
         remote_login()
