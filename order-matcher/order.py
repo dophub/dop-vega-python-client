@@ -230,7 +230,7 @@ def send_orders_to_local_api(orders):
     order_data = []
 
     for order in orders:
-        print(order)
+        # print(order)
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
@@ -454,7 +454,7 @@ def main():
         # process_orders(unprocessed_orders)
 
         # last_service_id = get_last_service_id()
-        print("V10 - ###########----------->")
+        print("V11 - ###########----------->")
         orders = fetch_orders(0)
 
         if orders:
