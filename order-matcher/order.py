@@ -9,6 +9,12 @@ from PIL import Image
 import threading
 from datetime import datetime, timedelta
 
+
+import win32event
+import win32api
+import winerror
+
+
 load_dotenv()
 exit_program = False
 API_URL = os.getenv("API_URL")
@@ -20,6 +26,7 @@ secret_key = os.getenv("REMOTE_API_SECRET")
 
 GLOBAL_REMOTE_TOKEN = ""
 GLOBAL_TOKEN = ""
+
 
 class LocalLogger:
     def __init__(self, log_dir="logs"):
@@ -323,10 +330,19 @@ def process_orders(orders):
             )
 
 
-mutex_name = "dop_vega_order_matcher"
+MUTEX_NAME = "order"
 
+def check_single_instance():
+    mutex = win32event.CreateMutex(None, False, MUTEX_NAME)
+    if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
+        mutex = None
+        print("Uygulama zaten çalışıyor.")
+        logger.log('Uygulama zaten çalışıyor.')
+        sys.exit()
 
 def main():
+
+    check_single_instance()
 
     try:
         remote_login()
