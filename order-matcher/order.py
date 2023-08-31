@@ -329,8 +329,8 @@ MUTEX_NAME = "order"
 VER = 21
 def main():
 
-    print(f"\n\nV{VER} - ###########-----------")
-    logger.log(f"V{VER} - Başlıyor...")
+    print(f"V{VER} - ###########-----------")
+    logger.log(f"\nV{VER} - Başlıyor...")
     try:
         logger.log('60 sn sonra devam edecek')
         time.sleep(60)
