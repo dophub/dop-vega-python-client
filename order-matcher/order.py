@@ -155,6 +155,7 @@ def send_orders_to_local_api(orders):
 
     for order in orders:
         print(order)
+        is_sync = order.get("is_sync", False)
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
@@ -188,7 +189,7 @@ def send_orders_to_local_api(orders):
                 "Options": code2,
                 "Price": item_price,
                 "Quantity": count,
-                "Comment": item.get("item_note", ""),
+                "Comment": item.get("item_note", "") if is_sync is False else "DİKKAT: Sipariş Hazırlandı!",
                 "OrginalPrice": 0,
             }
             product_items.append(items_model)
@@ -196,7 +197,7 @@ def send_orders_to_local_api(orders):
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
             "Price": order.get("service_total_amount", 0),
-            "TableNumber": order.get("special_table_name", "-"),
+            "TableNumber": order.get("special_table_name", "-") if is_sync is False else "!-HAZIRLANDI",
             "Address": "",
             "CustomerName": order.get("first_name", "")
             + " "
@@ -212,6 +213,8 @@ def send_orders_to_local_api(orders):
             "CustomerNote": order.get("service_notes", ""),
         }
         order_data.append(prepared_data)
+        if is_sync is True:
+            logger.log(f"{order.get('special_table_name','-')} - Manuel Hazırlandı")
 
     # print("-" * 55)
     # print(order_data)
@@ -325,14 +328,13 @@ def process_orders(orders):
             )
 
 
-MUTEX_NAME = "order"
-VER = 21
+VER = 22
 def main():
 
     print(f"V{VER} - ###########-----------")
-    logger.log(f"\nV{VER} - Başlıyor...")
+    logger.log("")
+    logger.log(f"V{VER} - Başladı...")
     try:
-        logger.log('60 sn sonra devam edecek')
         time.sleep(60)
 
         remote_login()
