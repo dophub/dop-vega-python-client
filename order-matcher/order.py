@@ -154,8 +154,9 @@ def send_orders_to_local_api(orders):
     order_data = []
 
     for order in orders:
-        print(order)
+        # print(order)
         is_sync = order.get("is_sync", False)
+        logger.log(f"is_sync: {is_sync}")
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
@@ -335,8 +336,6 @@ def main():
     logger.log("")
     logger.log(f"V{VER} - Başladı...")
     try:
-        time.sleep(60)
-
         remote_login()
 
         # delete_all_orders()
