@@ -155,7 +155,7 @@ def send_orders_to_local_api(orders):
 
     for order in orders:
         # print(order)
-        is_sync = order.get("is_sync", False)
+        is_sync = True if order.get("is_sync", False) is False and order.get("service_status_id","")=="IN_COMPLETE" else False
         logger.log(f"is_sync: {is_sync}")
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
