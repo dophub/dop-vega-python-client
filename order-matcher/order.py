@@ -359,8 +359,8 @@ def main():
             # print_orders()
             time.sleep(10)
     except Exception as err:
-        logger.log(f"GLOBAL [ERROR] V{VER} 60 sn sonra tekrar başlayacak --> {err}")
-        time.sleep(60)
+        logger.log(f"GLOBAL [ERROR] V{VER} 120 sn sonra tekrar başlayacak --> {err}")
+        time.sleep(120)
         main()
 
 
