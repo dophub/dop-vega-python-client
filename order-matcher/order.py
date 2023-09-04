@@ -197,10 +197,14 @@ def send_orders_to_local_api(orders):
             }
             product_items.append(items_model)
 
+        table_name_str = order.get("special_table_name", "-") if is_sync is False else "!-HAZIRLANDI"
+        if multiply == -1:
+            table_name_str = "İPTAL"
+
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
             "Price": multiply * float(order.get("service_total_amount", 0)),
-            "TableNumber": order.get("special_table_name", "-") if is_sync is False else "!-HAZIRLANDI",
+            "TableNumber": table_name_str,
             "Address": "",
             "CustomerName": order.get("first_name", "")
             + " "
