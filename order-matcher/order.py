@@ -199,7 +199,7 @@ def send_orders_to_local_api(orders):
 
         table_name_str = order.get("special_table_name", "-") if is_sync is False else "!-HAZIRLANDI"
         if multiply == -1:
-            table_name_str = "İPTAL"
+            table_name_str = "İPTAL EDİLDİ"
 
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
