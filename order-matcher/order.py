@@ -156,13 +156,14 @@ def send_orders_to_local_api(orders):
     for order in orders:
         # print(order)
         is_sync = True if order.get("is_sync", False) is False and order.get("service_status_id","")=="IN_COMPLETE" else False
+        multiply = -1 if order.get("service_status_id","")=="CANCEL2" else 1
         logger.log(f"is_sync: {is_sync}")
         product_items = []
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
             local_product_name = item.get("local_product_name", "")
-            item_price = item.get("item_price", 0)
-            count = item.get("count", [])
+            item_price = float(item.get("item_price", 0))
+            count = item.get("count", 0)
             local_options = item.get("local_options", [])
             choice1Id = -1
             choice2Id = -1
@@ -188,8 +189,8 @@ def send_orders_to_local_api(orders):
                 "Choice1Id": choice1Id if choice1Id > 0 else -1,
                 "Choice2Id": choice2Id if choice2Id > 0 else -1,
                 "Options": code2,
-                "Price": item_price,
-                "Quantity": count,
+                "Price": multiply * item_price,
+                "Quantity": multiply * count,
                 "Comment": item.get("item_note", "") if is_sync is False else "DİKKAT: Sipariş Hazırlandı!",
                 "OrginalPrice": 0,
             }
@@ -197,7 +198,7 @@ def send_orders_to_local_api(orders):
 
         prepared_data = {
             "PhoneNumber": order.get("mobile_phone", ""),
-            "Price": order.get("service_total_amount", 0),
+            "Price": multiply * float(order.get("service_total_amount", 0)),
             "TableNumber": order.get("special_table_name", "-") if is_sync is False else "!-HAZIRLANDI",
             "Address": "",
             "CustomerName": order.get("first_name", "")
@@ -214,6 +215,8 @@ def send_orders_to_local_api(orders):
             "CustomerNote": order.get("service_notes", ""),
         }
         order_data.append(prepared_data)
+        if multiply == -1:
+            logger.log(f"{order.get('special_table_name','-')} - İptal Edildi")
         if is_sync is True:
             logger.log(f"{order.get('special_table_name','-')} - Manuel Hazırlandı")
 
