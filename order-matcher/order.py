@@ -46,7 +46,8 @@ class LocalLogger:
 
     def log(self, message):
         try:
-            with open(self.get_log_file(), "a") as log_file:
+            self.get_log_file()
+            with open(self.today_log_file, "a") as log_file:
                 log_file.write(f"{datetime.now()} --> {message}\n")
         except:
             print("Log dosyası oluşturulamadı.")
@@ -337,7 +338,7 @@ def process_orders(orders):
             )
 
 
-VER = 22
+VER = 23
 def main():
 
     print(f"V{VER} - ###########-----------")
