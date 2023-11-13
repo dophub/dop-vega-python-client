@@ -337,30 +337,30 @@ def main():
     print(f"V{VER} - ###########-----------")
     logger.log("")
     logger.log(f"V{VER} - Başladı...")
-    try:
-        remote_login()
+    remote_login()
 
-        # delete_all_orders()
-        # reset_last_value()
-        # unprocessed_orders = fetch_unprocessed_orders()
-        # process_orders(unprocessed_orders)
-        # last_service_id = get_last_service_id()
+# delete_all_orders()
+# reset_last_value()
+# unprocessed_orders = fetch_unprocessed_orders()
+# process_orders(unprocessed_orders)
+# last_service_id = get_last_service_id()
 
-        orders = fetch_orders(0)
-        if orders:
-            logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
-            local_login()
-            send_orders_to_local_api(orders)
-            logger.log("\n")
-            # max_service_id = max(order["service_id"] for order in orders)
-            # update_last_service_id(max_service_id)
-        # print_orders()
-        time.sleep(10)
-    except Exception as err:
-        logger.log(f"GLOBAL [ERROR] V{VER} 120 sn sonra tekrar başlayacak --> {err}")
-        time.sleep(120)
-        main()
-
+    while True:
+        try:
+            orders = fetch_orders(0)
+            if orders:
+                logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
+                local_login()
+                send_orders_to_local_api(orders)
+                logger.log("\n")
+                # max_service_id = max(order["service_id"] for order in orders)
+                # update_last_service_id(max_service_id)
+            # print_orders()
+            time.sleep(10)
+        except Exception as err:
+            logger.log(f"GLOBAL [ERROR] V{VER} 120 sn sonra tekrar başlayacak --> {err}")
+            time.sleep(120)
+            remote_login()
 
 def on_activate(icon, item):
     pass
