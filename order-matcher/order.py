@@ -157,6 +157,9 @@ def send_orders_to_local_api(orders):
         for item in order.get("orders", [])[0].get("items", []):
             local_product_code = item.get("local_product_code", "")
             local_product_name = item.get("local_product_name", "")
+            if local_product_code is None or local_product_code == "":
+                logger.log(f"None Error:local_product_name: {local_product_code} - {local_product_name}")
+                continue
             logger.log(f"local_product_name: {local_product_code} - {local_product_name}")
             item_price = float(item.get("item_price", 0))
             count = item.get("count", 0)
