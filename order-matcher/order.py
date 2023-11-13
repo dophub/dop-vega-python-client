@@ -88,6 +88,7 @@ def local_login():
         if response.status_code == 200:
             GLOBAL_TOKEN = response.json()["token"]
         else:
+            logger.log(f"Login işlemi başarısız oldu: {response.status_code}")
             raise Exception("Login işlemi başarısız oldu.")
     except:
         logger.log('[ERROR] VEGA LOGIN BAŞARISIZ')
@@ -137,9 +138,9 @@ def close_local_order(bill_id: int, amount: float, table_name: str, customer_nam
         print("??" * 5)
 
         response = requests.post(local_api_url, json=prepared_data, headers=headers)
-        print(f"---> Order Data Response: {response.status_code}")
+        logger.log(f"---> Order Data Response: {response.status_code}")
         if response.status_code != 200:
-            print(f"Masa Kapatılamadı: {response.status_code}")
+            logger.log(f"Masa Kapatılamadı: {response.status_code}")
     except:
         logger.log(f"VEGAYADA SİPARİŞ KAPATILAMADI: {table_name}")
         raise Exception('Vegaya Sipariş Yazılamadı')
@@ -291,13 +292,13 @@ def fetch_orders(last_service_id):
             data = response.json()
             return data.get("data", [])
         else:
-            print(f"Error fetching orders: {response.status_code}")
+            logger.log(f"Error fetching orders from siparisim api: {response.status_code}")
             return None
     except Exception as err:
-        print(
-            f" REQUEST EXCEPTION: Uzak sunucuya bağlantı sağlanamadı. Tekrar denenecek"
+        logger.log(
+            f" REQUEST EXCEPTION: Siparisim sunucuna bağlantı sağlanamadı. Tekrar denenecek"
         )
-        print(err)
+        logger.log(err)
         return None
 
 
@@ -338,7 +339,7 @@ def process_orders(orders):
             )
 
 
-VER = 23
+VER = 24
 def main():
 
     print(f"V{VER} - ###########-----------")
@@ -349,24 +350,20 @@ def main():
 
         # delete_all_orders()
         # reset_last_value()
-        global exit_program
+        # unprocessed_orders = fetch_unprocessed_orders()
+        # process_orders(unprocessed_orders)
+        # last_service_id = get_last_service_id()
 
-        while not exit_program:
-            # unprocessed_orders = fetch_unprocessed_orders()
-            # process_orders(unprocessed_orders)
-
-            # last_service_id = get_last_service_id()
-            orders = fetch_orders(0)
-
-            if orders:
-                logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
-                local_login()
-                send_orders_to_local_api(orders)
-                logger.log("\n")
-                # max_service_id = max(order["service_id"] for order in orders)
-                # update_last_service_id(max_service_id)
-            # print_orders()
-            time.sleep(10)
+        orders = fetch_orders(0)
+        if orders:
+            logger.log(f"Merkezden {len(orders)} adet sipariş alındı.")
+            local_login()
+            send_orders_to_local_api(orders)
+            logger.log("\n")
+            # max_service_id = max(order["service_id"] for order in orders)
+            # update_last_service_id(max_service_id)
+        # print_orders()
+        time.sleep(10)
     except Exception as err:
         logger.log(f"GLOBAL [ERROR] V{VER} 120 sn sonra tekrar başlayacak --> {err}")
         time.sleep(120)
@@ -380,9 +377,9 @@ def on_activate(icon, item):
 def exit_action(icon, item):
     logger.log('Program Kapatıldı.')
     icon.stop()
-    global exit_program
-    exit_program = True
-    sys.exit(0)
+    # global exit_program
+    # exit_program = True
+    # sys.exit(0)
 
 
 
@@ -406,4 +403,5 @@ def create_icon(main_func):
 
 if __name__ == "__main__":
     logger.log('Program Başlatıldı')
-    create_icon(main)
+    # create_icon(main)
+    main();
