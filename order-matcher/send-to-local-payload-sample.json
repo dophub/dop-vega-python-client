@@ -1,0 +1,197 @@
+[
+    {
+        "PhoneNumber": null,
+        "Price": 470.0,
+        "TableNumber": "!-HAZIRLANDI",
+        "Address": "",
+        "CustomerName": " ",
+        "OrderNo": "229047",
+        "CreatedByUserName": "TIMEFOOD",
+        "Discount": 0,
+        "PaymentDetail": "",
+        "UserName": "TIMEFOOD",
+        "Bill": [
+            {
+                "ProductName": "ICED MOCHA",
+                "ProductId": 800004,
+                "Choice1Id": -1,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 170.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            },
+            {
+                "ProductName": "ICED CHAI TEA",
+                "ProductId": 500010,
+                "Choice1Id": -1,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            },
+            {
+                "ProductName": "CHAI TEA.KARTON(400ML)",
+                "ProductId": 700001,
+                "Choice1Id": 14717,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            }
+        ],
+        "ComputerName": "",
+        "service_id": 229047,
+        "CustomerNote": ""
+    },
+    {
+        "PhoneNumber": null,
+        "Price": 260.0,
+        "TableNumber": "!-HAZIRLANDI",
+        "Address": "",
+        "CustomerName": " ",
+        "OrderNo": "227609",
+        "CreatedByUserName": "TIMEFOOD",
+        "Discount": 0,
+        "PaymentDetail": "",
+        "UserName": "TIMEFOOD",
+        "Bill": [
+            {
+                "ProductName": "FILTRE KAHVE.SUTLU.KUPA(400ML)",
+                "ProductId": 400003,
+                "Choice1Id": 14667,
+                "Choice2Id": 10311,
+                "Options": "",
+                "Price": 110.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            },
+            {
+                "ProductName": "HONEY MILK",
+                "ProductId": 700009,
+                "Choice1Id": -1,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            }
+        ],
+        "ComputerName": "",
+        "service_id": 227609,
+        "CustomerNote": ""
+    },
+    {
+        "PhoneNumber": null,
+        "Price": 280.0,
+        "TableNumber": "!-HAZIRLANDI",
+        "Address": "",
+        "CustomerName": " ",
+        "OrderNo": "230098",
+        "CreatedByUserName": "TIMEFOOD",
+        "Discount": 0,
+        "PaymentDetail": "",
+        "UserName": "TIMEFOOD",
+        "Bill": [
+            {
+                "ProductName": "COFFEE LATTE.KUPA(400ML)",
+                "ProductId": 400009,
+                "Choice1Id": 14683,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 130.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            },
+            {
+                "ProductName": "CARAMEL MACCHIATO.KUPA(400ML)",
+                "ProductId": 400011,
+                "Choice1Id": 14687,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            }
+        ],
+        "ComputerName": "",
+        "service_id": 230098,
+        "CustomerNote": ""
+    },
+    {
+        "PhoneNumber": "+905076124760",
+        "Price": 260.0,
+        "TableNumber": "!-HAZIRLANDI",
+        "Address": "",
+        "CustomerName": "Ceren Acar",
+        "OrderNo": "227306",
+        "CreatedByUserName": "TIMEFOOD",
+        "Discount": 0,
+        "PaymentDetail": "",
+        "UserName": "TIMEFOOD",
+        "Bill": [
+            {
+                "ProductName": "BEYAZ SICAK CIKOLATA.KARTON(400ML)",
+                "ProductId": 700003,
+                "Choice1Id": 14721,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            },
+            {
+                "ProductName": "FILTRE KAHVE.SUTLU.KARTON(400ML)",
+                "ProductId": 400003,
+                "Choice1Id": 14667,
+                "Choice2Id": 10310,
+                "Options": "",
+                "Price": 110.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            }
+        ],
+        "ComputerName": "",
+        "service_id": 227306,
+        "CustomerNote": ""
+    },
+    {
+        "PhoneNumber": "+905369145897",
+        "Price": 150.0,
+        "TableNumber": "!-HAZIRLANDI",
+        "Address": "",
+        "CustomerName": "\u00c7a\u011fla Su Ert\u00fcrk",
+        "OrderNo": "227309",
+        "CreatedByUserName": "TIMEFOOD",
+        "Discount": 0,
+        "PaymentDetail": "",
+        "UserName": "TIMEFOOD",
+        "Bill": [
+            {
+                "ProductName": "CHAI TEA.KARTON(400ML)",
+                "ProductId": 700001,
+                "Choice1Id": 14717,
+                "Choice2Id": -1,
+                "Options": "",
+                "Price": 150.0,
+                "Quantity": 1,
+                "Comment": "D\u0130KKAT: Sipari\u015f Haz\u0131rland\u0131!",
+                "OrginalPrice": 0
+            }
+        ],
+        "ComputerName": "",
+        "service_id": 227309,
+        "CustomerNote": ""
+    }
+]
